@@ -1,0 +1,945 @@
+{
+  "generated": "2026-11-16",
+  "nodes": [
+    {
+      "id": "query.fct-arr-daily",
+      "type": "query",
+      "title": "Certified \u2014 daily ARR by customer",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "certified_by": "finance",
+      "certified_on": "2026-06-10",
+      "warehouse_object": "analytics.fct_arr_daily",
+      "depends_on": [
+        "entity.subscription",
+        "entity.customer",
+        "source.stripe"
+      ],
+      "tags": [
+        "certified",
+        "revenue"
+      ],
+      "path": "analytics-reference/data/certified-queries/fct-arr-daily.md"
+    },
+    {
+      "id": "entity.customer",
+      "type": "entity",
+      "title": "Customer",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "grain": "One row per paying billing account (Stripe customer) with at least one active paid subscription.",
+      "primary_key": "stripe_customer_id",
+      "depends_on": [
+        "source.stripe",
+        "source.product-events"
+      ],
+      "tags": [
+        "core"
+      ],
+      "path": "analytics-reference/data/entities/customer.md"
+    },
+    {
+      "id": "entity.subscription",
+      "type": "entity",
+      "title": "Subscription",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "grain": "One row per Stripe subscription per day (daily snapshot).",
+      "primary_key": "subscription_id, snapshot_date",
+      "depends_on": [
+        "source.stripe",
+        "entity.customer"
+      ],
+      "tags": [
+        "core",
+        "revenue"
+      ],
+      "path": "analytics-reference/data/entities/subscription.md"
+    },
+    {
+      "id": "source.product-events",
+      "type": "source",
+      "title": "Product event stream",
+      "owner": "data",
+      "status": "reviewed",
+      "updated": "2026-07-22",
+      "system": "Segment \u2192 warehouse",
+      "sync": "Streaming, ~15 minutes latency, into raw_events.*",
+      "tags": [
+        "product",
+        "usage"
+      ],
+      "path": "analytics-reference/data/sources/product-events.md"
+    },
+    {
+      "id": "source.stripe",
+      "type": "source",
+      "title": "Stripe (billing)",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-10-02",
+      "system": "Stripe",
+      "sync": "Fivetran, every 6 hours, into raw_stripe.*",
+      "tags": [
+        "billing",
+        "revenue"
+      ],
+      "path": "analytics-reference/data/sources/stripe.md"
+    },
+    {
+      "id": "register.ap-ar",
+      "type": "register",
+      "title": "Accounts payable & receivable conventions",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-09-01",
+      "system": "NetSuite",
+      "depends_on": [
+        "register.vendors",
+        "source.stripe"
+      ],
+      "tags": [
+        "finance",
+        "ap",
+        "ar",
+        "cash"
+      ],
+      "path": "analytics-reference/finance/ap-ar.md"
+    },
+    {
+      "id": "register.vendors",
+      "type": "register",
+      "title": "Vendor register",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-11-01",
+      "system": "NetSuite (AP) + this register",
+      "tags": [
+        "finance",
+        "expenses",
+        "ap"
+      ],
+      "path": "analytics-reference/finance/vendors.md"
+    },
+    {
+      "id": "framework.growth-accounting",
+      "type": "framework",
+      "title": "Growth accounting",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "tags": [
+        "framework",
+        "horizontal"
+      ],
+      "path": "analytics-reference/frameworks/growth-accounting.md"
+    },
+    {
+      "id": "framework.mix-shift",
+      "type": "framework",
+      "title": "Mix-shift analysis",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-09-18",
+      "tags": [
+        "framework",
+        "horizontal"
+      ],
+      "path": "analytics-reference/frameworks/mix-shift.md"
+    },
+    {
+      "id": "analysis.2026-07-usage-alerts-review",
+      "type": "analysis",
+      "title": "Review \u2014 did usage alerts reduce churn?",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-07-22",
+      "question": "Did the April 2026 usage-alert emails reduce logo churn among low-activity customers?",
+      "confidence": "medium",
+      "reviews": "decision.2026-04-usage-alerts",
+      "depends_on": [
+        "metric.logo-churn-rate",
+        "source.product-events",
+        "entity.customer"
+      ],
+      "tags": [
+        "retention",
+        "review"
+      ],
+      "path": "analytics-reference/history/analyses/2026-07-usage-alerts-review.md"
+    },
+    {
+      "id": "analysis.2026-09-churn-by-cohort",
+      "type": "analysis",
+      "title": "Churn by billing interval and cohort",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-09-18",
+      "question": "Do annual-plan customers retain better than monthly, controlling for size and cohort?",
+      "confidence": "high",
+      "depends_on": [
+        "metric.logo-churn-rate",
+        "metric.net-revenue-retention",
+        "entity.subscription"
+      ],
+      "tags": [
+        "retention",
+        "pricing"
+      ],
+      "path": "analytics-reference/history/analyses/2026-09-churn-by-cohort.md"
+    },
+    {
+      "id": "decision.2026-04-usage-alerts",
+      "type": "decision",
+      "title": "Launch usage-alert emails for low-activity customers",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-07-22",
+      "decided_on": "2026-04-02",
+      "review_on": "2026-07-15",
+      "outcome": "mixed",
+      "depends_on": [
+        "metric.logo-churn-rate",
+        "model.arr-bridge"
+      ],
+      "tags": [
+        "retention"
+      ],
+      "path": "analytics-reference/history/decisions/2026-04-usage-alerts.md"
+    },
+    {
+      "id": "decision.2026-10-annual-plan-discount",
+      "type": "decision",
+      "title": "Increase the annual-plan discount from 10% to 17%",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-10-01",
+      "decided_on": "2026-10-01",
+      "review_on": "2027-01-15",
+      "outcome": "pending",
+      "depends_on": [
+        "analysis.2026-09-churn-by-cohort",
+        "model.arr-bridge",
+        "metric.arr"
+      ],
+      "tags": [
+        "pricing",
+        "retention"
+      ],
+      "path": "analytics-reference/history/decisions/2026-10-annual-plan-discount.md"
+    },
+    {
+      "id": "metric.arr",
+      "type": "metric",
+      "title": "Annual Recurring Revenue (ARR)",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "unit": "usd",
+      "grain": "daily snapshot, company",
+      "direction": "up_is_good",
+      "implementation": "query.fct-arr-daily",
+      "depends_on": [
+        "query.fct-arr-daily",
+        "entity.subscription",
+        "entity.customer"
+      ],
+      "tags": [
+        "revenue",
+        "board"
+      ],
+      "path": "analytics-reference/metrics/arr.md"
+    },
+    {
+      "id": "metric.cac-payback",
+      "type": "metric",
+      "title": "CAC Payback (months)",
+      "owner": "unowned",
+      "status": "draft",
+      "updated": "2026-08-01",
+      "unit": "months",
+      "grain": "quarterly, company",
+      "direction": "down_is_good",
+      "implementation": "",
+      "depends_on": [
+        "metric.arr"
+      ],
+      "tags": [
+        "efficiency"
+      ],
+      "path": "analytics-reference/metrics/cac-payback.md"
+    },
+    {
+      "id": "metric.cohort-retention",
+      "type": "metric",
+      "title": "Cohort Logo Retention",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-09-18",
+      "unit": "percent",
+      "grain": "monthly cohort \u00d7 months since start",
+      "direction": "up_is_good",
+      "implementation": "analytics.fct_cohort_retention",
+      "depends_on": [
+        "entity.customer",
+        "query.fct-arr-daily"
+      ],
+      "tags": [
+        "retention",
+        "cohorts"
+      ],
+      "path": "analytics-reference/metrics/cohort-retention.md"
+    },
+    {
+      "id": "metric.logo-churn-rate",
+      "type": "metric",
+      "title": "Logo Churn Rate",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-07-22",
+      "unit": "percent",
+      "grain": "monthly, company",
+      "direction": "down_is_good",
+      "implementation": "models/marts/fct_logo_churn_monthly.sql",
+      "depends_on": [
+        "entity.customer"
+      ],
+      "tags": [
+        "retention"
+      ],
+      "path": "analytics-reference/metrics/logo-churn-rate.md"
+    },
+    {
+      "id": "metric.net-revenue-retention",
+      "type": "metric",
+      "title": "Net Revenue Retention (NRR)",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "unit": "percent",
+      "grain": "trailing 12 months, company",
+      "direction": "up_is_good",
+      "implementation": "models/marts/fct_nrr_monthly.sql",
+      "depends_on": [
+        "metric.arr",
+        "entity.customer"
+      ],
+      "tags": [
+        "revenue",
+        "retention",
+        "board"
+      ],
+      "path": "analytics-reference/metrics/net-revenue-retention.md"
+    },
+    {
+      "id": "metric.trial-to-paid",
+      "type": "metric",
+      "title": "Trial-to-Paid Conversion",
+      "owner": "growth",
+      "status": "reviewed",
+      "updated": "2026-08-05",
+      "unit": "percent",
+      "grain": "weekly signup cohort",
+      "direction": "up_is_good",
+      "implementation": "analytics.fct_signup_funnel",
+      "depends_on": [
+        "entity.engagement-event",
+        "entity.customer"
+      ],
+      "tags": [
+        "funnel",
+        "growth"
+      ],
+      "path": "analytics-reference/metrics/trial-to-paid.md"
+    },
+    {
+      "id": "model.arr-bridge",
+      "type": "model",
+      "title": "ARR Bridge",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-06-10",
+      "kind": "bridge",
+      "depends_on": [
+        "metric.arr",
+        "metric.net-revenue-retention",
+        "metric.logo-churn-rate"
+      ],
+      "tags": [
+        "revenue",
+        "board"
+      ],
+      "path": "analytics-reference/models/arr-bridge.md"
+    },
+    {
+      "id": "entity.engagement-event",
+      "type": "entity",
+      "title": "Engagement events \u2192 product concepts",
+      "owner": "data",
+      "status": "reviewed",
+      "updated": "2026-07-22",
+      "grain": "One row per tracked event.",
+      "primary_key": "event_id",
+      "depends_on": [
+        "source.product-events",
+        "entity.customer"
+      ],
+      "tags": [
+        "product",
+        "engagement"
+      ],
+      "path": "analytics-reference/product/engagement-mapping.md"
+    },
+    {
+      "id": "tooling.google-sheets",
+      "type": "tooling",
+      "title": "Google Sheets output",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-10-01",
+      "system": "Google Drive / Sheets via MCP",
+      "tags": [
+        "tooling",
+        "output"
+      ],
+      "path": "execution/tooling/google-sheets.md"
+    },
+    {
+      "id": "tooling.planning-mcp",
+      "type": "tooling",
+      "title": "Planning tool connection (Pigment / Anaplan)",
+      "owner": "finance",
+      "status": "draft",
+      "updated": "2026-11-01",
+      "system": "Planning tool via MCP",
+      "tags": [
+        "tooling",
+        "fp&a"
+      ],
+      "path": "execution/tooling/planning-mcp.md"
+    },
+    {
+      "id": "tooling.warehouse-mcp",
+      "type": "tooling",
+      "title": "Warehouse connection",
+      "owner": "data",
+      "status": "reviewed",
+      "updated": "2026-10-01",
+      "system": "Snowflake via MCP (read-only role)",
+      "tags": [
+        "tooling",
+        "warehouse"
+      ],
+      "path": "execution/tooling/warehouse-mcp.md"
+    },
+    {
+      "id": "skill.answer-metric-question",
+      "type": "skill",
+      "name": "answer-metric-question",
+      "description": "Answer a question about a business metric (\"what's our NRR?\", \"how many active customers?\") using only the governed definitions and certified queries in analytics-reference. Use for any quantitative question about Lumen's metrics.",
+      "path": "execution/skills/answer-metric-question/SKILL.md"
+    },
+    {
+      "id": "skill.compare-forecast-versions",
+      "type": "skill",
+      "name": "compare-forecast-versions",
+      "description": "Compare the latest forecast with an earlier version (e.g. from three weeks ago), attribute the deltas to drivers, and produce the standard forecast-variance output. Use when someone asks what changed in the forecast, or before the weekly forecast review.",
+      "path": "execution/skills/compare-forecast-versions/SKILL.md"
+    }
+  ],
+  "edges": [
+    {
+      "from": "query.fct-arr-daily",
+      "to": "entity.subscription",
+      "kind": "depends_on"
+    },
+    {
+      "from": "query.fct-arr-daily",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "query.fct-arr-daily",
+      "to": "source.stripe",
+      "kind": "depends_on"
+    },
+    {
+      "from": "query.fct-arr-daily",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "query.fct-arr-daily",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "query.fct-arr-daily",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "entity.customer",
+      "to": "source.stripe",
+      "kind": "depends_on"
+    },
+    {
+      "from": "entity.customer",
+      "to": "source.product-events",
+      "kind": "depends_on"
+    },
+    {
+      "from": "entity.customer",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "entity.customer",
+      "to": "source.product-events",
+      "kind": "link"
+    },
+    {
+      "from": "entity.customer",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "entity.subscription",
+      "to": "source.stripe",
+      "kind": "depends_on"
+    },
+    {
+      "from": "entity.subscription",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "entity.subscription",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "entity.subscription",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "source.product-events",
+      "to": "analysis.2026-07-usage-alerts-review",
+      "kind": "link"
+    },
+    {
+      "from": "source.product-events",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "source.stripe",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "source.stripe",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "source.stripe",
+      "to": "source.product-events",
+      "kind": "link"
+    },
+    {
+      "from": "register.ap-ar",
+      "to": "register.vendors",
+      "kind": "depends_on"
+    },
+    {
+      "from": "register.ap-ar",
+      "to": "source.stripe",
+      "kind": "depends_on"
+    },
+    {
+      "from": "register.ap-ar",
+      "to": "register.vendors",
+      "kind": "link"
+    },
+    {
+      "from": "register.ap-ar",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "register.vendors",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "register.vendors",
+      "to": "register.ap-ar",
+      "kind": "link"
+    },
+    {
+      "from": "framework.growth-accounting",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "framework.growth-accounting",
+      "to": "entity.engagement-event",
+      "kind": "link"
+    },
+    {
+      "from": "framework.growth-accounting",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "framework.mix-shift",
+      "to": "decision.2026-10-annual-plan-discount",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "metric.logo-churn-rate",
+      "kind": "depends_on"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "source.product-events",
+      "kind": "depends_on"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "decision.2026-04-usage-alerts",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "source.product-events",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-07-usage-alerts-review",
+      "to": "decision.2026-04-usage-alerts",
+      "kind": "reviews"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "metric.logo-churn-rate",
+      "kind": "depends_on"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "metric.net-revenue-retention",
+      "kind": "depends_on"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "entity.subscription",
+      "kind": "depends_on"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "decision.2026-10-annual-plan-discount",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "metric.cohort-retention",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "analysis.2026-09-churn-by-cohort",
+      "to": "metric.net-revenue-retention",
+      "kind": "link"
+    },
+    {
+      "from": "decision.2026-04-usage-alerts",
+      "to": "metric.logo-churn-rate",
+      "kind": "depends_on"
+    },
+    {
+      "from": "decision.2026-04-usage-alerts",
+      "to": "model.arr-bridge",
+      "kind": "depends_on"
+    },
+    {
+      "from": "decision.2026-04-usage-alerts",
+      "to": "analysis.2026-07-usage-alerts-review",
+      "kind": "link"
+    },
+    {
+      "from": "decision.2026-04-usage-alerts",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "decision.2026-04-usage-alerts",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "decision.2026-10-annual-plan-discount",
+      "to": "analysis.2026-09-churn-by-cohort",
+      "kind": "depends_on"
+    },
+    {
+      "from": "decision.2026-10-annual-plan-discount",
+      "to": "model.arr-bridge",
+      "kind": "depends_on"
+    },
+    {
+      "from": "decision.2026-10-annual-plan-discount",
+      "to": "metric.arr",
+      "kind": "depends_on"
+    },
+    {
+      "from": "decision.2026-10-annual-plan-discount",
+      "to": "analysis.2026-09-churn-by-cohort",
+      "kind": "link"
+    },
+    {
+      "from": "decision.2026-10-annual-plan-discount",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "decision.2026-10-annual-plan-discount",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "metric.arr",
+      "to": "query.fct-arr-daily",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.arr",
+      "to": "entity.subscription",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.arr",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.arr",
+      "to": "entity.subscription",
+      "kind": "link"
+    },
+    {
+      "from": "metric.arr",
+      "to": "query.fct-arr-daily",
+      "kind": "link"
+    },
+    {
+      "from": "metric.arr",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "metric.cac-payback",
+      "to": "metric.arr",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.cohort-retention",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.cohort-retention",
+      "to": "query.fct-arr-daily",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.cohort-retention",
+      "to": "analysis.2026-09-churn-by-cohort",
+      "kind": "link"
+    },
+    {
+      "from": "metric.cohort-retention",
+      "to": "metric.net-revenue-retention",
+      "kind": "link"
+    },
+    {
+      "from": "metric.logo-churn-rate",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.logo-churn-rate",
+      "to": "analysis.2026-07-usage-alerts-review",
+      "kind": "link"
+    },
+    {
+      "from": "metric.net-revenue-retention",
+      "to": "metric.arr",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.net-revenue-retention",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.net-revenue-retention",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "metric.net-revenue-retention",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "metric.trial-to-paid",
+      "to": "entity.engagement-event",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.trial-to-paid",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.trial-to-paid",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "metric.trial-to-paid",
+      "to": "entity.engagement-event",
+      "kind": "link"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "metric.arr",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "metric.net-revenue-retention",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "metric.logo-churn-rate",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "framework.growth-accounting",
+      "kind": "link"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "model.arr-bridge",
+      "to": "metric.net-revenue-retention",
+      "kind": "link"
+    },
+    {
+      "from": "entity.engagement-event",
+      "to": "source.product-events",
+      "kind": "depends_on"
+    },
+    {
+      "from": "entity.engagement-event",
+      "to": "entity.customer",
+      "kind": "depends_on"
+    },
+    {
+      "from": "entity.engagement-event",
+      "to": "entity.subscription",
+      "kind": "link"
+    },
+    {
+      "from": "entity.engagement-event",
+      "to": "metric.trial-to-paid",
+      "kind": "link"
+    },
+    {
+      "from": "entity.engagement-event",
+      "to": "source.product-events",
+      "kind": "link"
+    },
+    {
+      "from": "skill.answer-metric-question",
+      "to": "query.fct-arr-daily",
+      "kind": "link"
+    },
+    {
+      "from": "skill.answer-metric-question",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "skill.answer-metric-question",
+      "to": "tooling.warehouse-mcp",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "framework.mix-shift",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "metric.net-revenue-retention",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "query.fct-arr-daily",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "tooling.google-sheets",
+      "kind": "link"
+    },
+    {
+      "from": "skill.compare-forecast-versions",
+      "to": "tooling.planning-mcp",
+      "kind": "link"
+    }
+  ]
+}
