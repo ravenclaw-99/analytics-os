@@ -15,6 +15,7 @@ tags: [tooling, warehouse]
 
 ## What works
 - Run certified queries by name from `analytics-reference/data/certified-queries/`. Copy the SQL exactly.
+- Check column meanings in [[register.key-tables]] before using a key table.
 - Always `limit` exploratory queries, and sample before full scans.
 
 ## Gotchas

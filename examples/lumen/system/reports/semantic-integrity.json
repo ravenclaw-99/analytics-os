@@ -1,0 +1,111 @@
+{
+  "check": "semantic-integrity",
+  "date": "2026-11-16",
+  "counts": {
+    "high": 1,
+    "medium": 0,
+    "low": 5
+  },
+  "findings": [
+    {
+      "severity": "high",
+      "kind": "competing_definition",
+      "where": "execution/tooling/planning-mcp.md",
+      "message": "Defines 'ARR' outside its canonical artifact `metric.arr`",
+      "proposed_fix": "Replace the definition with a link to [[metric.arr]]. If the difference is real and intentional, give it a distinct governed name.",
+      "evidence": [
+        "\u201c- The planning model's \"ARR\" line is defined as contracted MRR \u00d7 12, including one-time implementation fees.\u201d"
+      ]
+    },
+    {
+      "severity": "low",
+      "kind": "unlinked_mention",
+      "where": "analytics-reference/data/entities/subscription.md",
+      "message": "Uses 'ARR' but never links its canonical definition",
+      "proposed_fix": "Link [[metric.arr]] at the first mention.",
+      "evidence": [
+        "\u201c- Paused subscriptions count as **inactive** for ARR but are not churned until they're cancelled.\u201d"
+      ]
+    },
+    {
+      "severity": "low",
+      "kind": "unlinked_mention",
+      "where": "analytics-reference/frameworks/growth-accounting.md",
+      "message": "Uses 'ARR' but never links its canonical definition",
+      "proposed_fix": "Link [[metric.arr]] at the first mention.",
+      "evidence": [
+        "\u201cA general method for decomposing the change in any stock (customers, ARR, active users) into the flows that caused it:\u201d"
+      ]
+    },
+    {
+      "severity": "low",
+      "kind": "unlinked_mention",
+      "where": "analytics-reference/history/decisions/2026-04-usage-alerts.md",
+      "message": "Uses 'ARR' but never links its canonical definition",
+      "proposed_fix": "Link [[metric.arr]] at the first mention.",
+      "evidence": [
+        "\u201cPer [[model.arr-bridge]], halving that gap is worth about $250K of ARR per year.\u201d"
+      ]
+    },
+    {
+      "severity": "low",
+      "kind": "unlinked_mention",
+      "where": "analytics-reference/metrics/cohort-retention.md",
+      "message": "Uses 'ARR' but never links its canonical definition",
+      "proposed_fix": "Link [[metric.arr]] at the first mention.",
+      "evidence": [
+        "\u201cFor customers whose first paid month is M\u2080, the share still active (ARR > 0) at month M\u2080+k.\u201d"
+      ]
+    },
+    {
+      "severity": "low",
+      "kind": "unlinked_mention",
+      "where": "execution/tooling/planning-mcp.md",
+      "message": "Uses 'ARR' but never links its canonical definition",
+      "proposed_fix": "Link [[metric.arr]] at the first mention.",
+      "evidence": [
+        "\u201c- The planning model's \"ARR\" line is defined as contracted MRR \u00d7 12, including one-time implementation fees.\u201d"
+      ]
+    }
+  ],
+  "review_sets": {
+    "ARR": [
+      "metric.arr",
+      "analytics-reference/data/certified-queries/fct-arr-daily.md",
+      "analytics-reference/data/entities/subscription.md",
+      "analytics-reference/data/key-tables.md",
+      "analytics-reference/data/sources/stripe.md",
+      "analytics-reference/frameworks/growth-accounting.md",
+      "analytics-reference/history/decisions/2026-04-usage-alerts.md",
+      "analytics-reference/metrics/cac-payback.md",
+      "analytics-reference/metrics/cohort-retention.md",
+      "analytics-reference/metrics/net-revenue-retention.md",
+      "analytics-reference/models/arr-bridge.md",
+      "execution/tooling/planning-mcp.md",
+      "execution/skills/compare-forecast-versions/SKILL.md"
+    ],
+    "NRR": [
+      "metric.net-revenue-retention",
+      "analytics-reference/history/analyses/2026-09-churn-by-cohort.md"
+    ],
+    "net revenue retention": [
+      "metric.net-revenue-retention"
+    ],
+    "logo churn": [
+      "metric.logo-churn-rate",
+      "analytics-reference/history/analyses/2026-07-usage-alerts-review.md",
+      "analytics-reference/history/decisions/2026-04-usage-alerts.md",
+      "analytics-reference/models/arr-bridge.md"
+    ],
+    "DAU": [
+      "metric.dau"
+    ],
+    "active user": [
+      "metric.dau",
+      "analytics-reference/product/engagement-mapping.md"
+    ],
+    "trial-to-paid": [
+      "metric.trial-to-paid"
+    ]
+  }
+}

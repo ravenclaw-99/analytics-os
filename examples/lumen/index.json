@@ -60,6 +60,24 @@
       "path": "analytics-reference/data/entities/subscription.md"
     },
     {
+      "id": "register.key-tables",
+      "type": "register",
+      "title": "Key tables and their columns",
+      "owner": "data",
+      "status": "reviewed",
+      "updated": "2026-10-01",
+      "system": "Snowflake",
+      "depends_on": [
+        "source.stripe",
+        "source.product-events"
+      ],
+      "tags": [
+        "data",
+        "schema"
+      ],
+      "path": "analytics-reference/data/key-tables.md"
+    },
+    {
       "id": "source.product-events",
       "type": "source",
       "title": "Product event stream",
@@ -294,6 +312,26 @@
       "path": "analytics-reference/metrics/cohort-retention.md"
     },
     {
+      "id": "metric.dau",
+      "type": "metric",
+      "title": "Daily Active Users (DAU)",
+      "owner": "product",
+      "status": "reviewed",
+      "updated": "2026-07-22",
+      "unit": "count",
+      "grain": "daily (UTC), company",
+      "direction": "up_is_good",
+      "implementation": "analytics.fct_daily_active_users",
+      "depends_on": [
+        "entity.engagement-event"
+      ],
+      "tags": [
+        "product",
+        "engagement"
+      ],
+      "path": "analytics-reference/metrics/dau.md"
+    },
+    {
       "id": "metric.logo-churn-rate",
       "type": "metric",
       "title": "Logo Churn Rate",
@@ -303,7 +341,7 @@
       "unit": "percent",
       "grain": "monthly, company",
       "direction": "down_is_good",
-      "implementation": "models/marts/fct_logo_churn_monthly.sql",
+      "implementation": "analytics.fct_logo_churn_monthly",
       "depends_on": [
         "entity.customer"
       ],
@@ -322,7 +360,7 @@
       "unit": "percent",
       "grain": "trailing 12 months, company",
       "direction": "up_is_good",
-      "implementation": "models/marts/fct_nrr_monthly.sql",
+      "implementation": "analytics.fct_nrr_monthly",
       "depends_on": [
         "metric.arr",
         "entity.customer"
@@ -524,6 +562,41 @@
     {
       "from": "entity.subscription",
       "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "source.stripe",
+      "kind": "depends_on"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "source.product-events",
+      "kind": "depends_on"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "entity.engagement-event",
+      "kind": "link"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "metric.trial-to-paid",
+      "kind": "link"
+    },
+    {
+      "from": "register.key-tables",
+      "to": "query.fct-arr-daily",
       "kind": "link"
     },
     {
@@ -782,6 +855,21 @@
       "kind": "link"
     },
     {
+      "from": "metric.dau",
+      "to": "entity.engagement-event",
+      "kind": "depends_on"
+    },
+    {
+      "from": "metric.dau",
+      "to": "analysis.2026-07-usage-alerts-review",
+      "kind": "link"
+    },
+    {
+      "from": "metric.dau",
+      "to": "source.product-events",
+      "kind": "link"
+    },
+    {
       "from": "metric.logo-churn-rate",
       "to": "entity.customer",
       "kind": "depends_on"
@@ -883,12 +971,22 @@
     },
     {
       "from": "entity.engagement-event",
+      "to": "metric.dau",
+      "kind": "link"
+    },
+    {
+      "from": "entity.engagement-event",
       "to": "metric.trial-to-paid",
       "kind": "link"
     },
     {
       "from": "entity.engagement-event",
       "to": "source.product-events",
+      "kind": "link"
+    },
+    {
+      "from": "tooling.warehouse-mcp",
+      "to": "register.key-tables",
       "kind": "link"
     },
     {

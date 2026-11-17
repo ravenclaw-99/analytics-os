@@ -1,0 +1,49 @@
+{
+  "check": "schema-integrity",
+  "date": "2026-11-16",
+  "counts": {
+    "high": 2,
+    "medium": 2,
+    "low": 0
+  },
+  "findings": [
+    {
+      "severity": "high",
+      "kind": "missing_column",
+      "where": "analytics.fct_signup_funnel.trial_started_at",
+      "message": "Documented column `analytics.fct_signup_funnel.trial_started_at` no longer exists",
+      "proposed_fix": "Looks renamed to `trial_start_ts`; update the register and any queries.",
+      "evidence": [
+        "documented in `analytics-reference/data/key-tables.md`"
+      ]
+    },
+    {
+      "severity": "high",
+      "kind": "missing_table",
+      "where": "analytics.fct_nrr_monthly",
+      "message": "`analytics.fct_nrr_monthly` is referenced in the knowledge base but no longer exists in the warehouse",
+      "proposed_fix": "It looks like it was renamed to `analytics.fct_nrr_monthly_v2`. Update the references and re-validate.",
+      "evidence": [
+        "referenced at `analytics-reference/metrics/net-revenue-retention.md:11`"
+      ]
+    },
+    {
+      "severity": "medium",
+      "kind": "undocumented_column",
+      "where": "analytics.fct_arr_daily.plan_tier",
+      "message": "Key table column `analytics.fct_arr_daily.plan_tier` exists in the warehouse but isn't documented anywhere",
+      "proposed_fix": "Add a row for `plan_tier` under `### analytics.fct_arr_daily` in `analytics-reference/data/key-tables.md`, with a description.",
+      "evidence": []
+    },
+    {
+      "severity": "medium",
+      "kind": "undocumented_column",
+      "where": "analytics.fct_signup_funnel.trial_start_ts",
+      "message": "Key table column `analytics.fct_signup_funnel.trial_start_ts` exists in the warehouse but isn't documented anywhere",
+      "proposed_fix": "Add a row for `trial_start_ts` under `### analytics.fct_signup_funnel` in `analytics-reference/data/key-tables.md`, with a description.",
+      "evidence": []
+    }
+  ],
+  "tables_referenced": 14,
+  "tables_in_catalog": 14
+}

@@ -1,0 +1,102 @@
+{
+  "warehouse": {
+    "name": "snowflake",
+    "schemas": [
+      "analytics",
+      "raw_stripe",
+      "raw_events"
+    ],
+    "catalog_query": "select lower(table_schema) as table_schema, lower(table_name) as table_name, lower(column_name) as column_name from information_schema.columns where lower(table_schema) in ('analytics', 'raw_stripe', 'raw_events') order by 1, 2, ordinal_position"
+  },
+  "key_tables_register": "register.key-tables",
+  "canonical_terms": {
+    "ARR": "metric.arr",
+    "NRR": "metric.net-revenue-retention",
+    "net revenue retention": "metric.net-revenue-retention",
+    "logo churn": "metric.logo-churn-rate",
+    "DAU": "metric.dau",
+    "active user": "metric.dau",
+    "trial-to-paid": "metric.trial-to-paid"
+  },
+  "structure": {
+    "folders": {
+      "analytics-reference/metrics": [
+        "metric"
+      ],
+      "analytics-reference/models": [
+        "model"
+      ],
+      "analytics-reference/frameworks": [
+        "framework"
+      ],
+      "analytics-reference/finance": [
+        "register"
+      ],
+      "analytics-reference/product": [
+        "entity",
+        "register"
+      ],
+      "analytics-reference/data": [
+        "register"
+      ],
+      "analytics-reference/data/sources": [
+        "source"
+      ],
+      "analytics-reference/data/entities": [
+        "entity"
+      ],
+      "analytics-reference/data/certified-queries": [
+        "query"
+      ],
+      "analytics-reference/history/analyses": [
+        "analysis"
+      ],
+      "analytics-reference/history/decisions": [
+        "decision"
+      ],
+      "execution/tooling": [
+        "tooling"
+      ]
+    },
+    "max_words": 900,
+    "max_files_per_folder": 25,
+    "max_depth": 4,
+    "duplicate_threshold": 0.45
+  },
+  "enrichment": {
+    "github_repos": [
+      "lumen/data-pipelines",
+      "lumen/app"
+    ],
+    "github_paths_of_interest": [
+      "dags/",
+      "models/",
+      "migrations/",
+      "tracking-plan/",
+      "feature-flags/"
+    ],
+    "slack_channels": [
+      "#data",
+      "#finance",
+      "#product-launches",
+      "#bizops"
+    ],
+    "drive_folders": [
+      "Exec/Weekly Business Review",
+      "Finance/Board",
+      "Product/Launch Docs"
+    ]
+  },
+  "gaps": {
+    "slack_channels": [
+      "#ask-data",
+      "#analytics",
+      "#finance"
+    ],
+    "analysis_drive_folders": [
+      "Analytics/Ad hoc"
+    ],
+    "use_query_history": true,
+    "min_importance": 6
+  }
+}

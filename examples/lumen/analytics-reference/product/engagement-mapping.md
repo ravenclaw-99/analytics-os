@@ -16,7 +16,7 @@ Maps raw tracked events to the product concepts analysts actually use.
 
 | Concept | Event(s) | Notes |
 |---|---|---|
-| **Active user** | `workflow_run` | **Not** `session_start`; see the known issues in [[source.product-events]] |
+| **Active user** | `workflow_run` | **Not** `session_start`; see the known issues in [[source.product-events]]. Daily count is [[metric.dau]] |
 | **Activated account** | ≥ 3 `workflow_run` by ≥ 2 users within 14 days of signup | Used in the activation funnel |
 | **Power user** | ≥ 20 `workflow_run` in a trailing 7 days | |
 | **Seat utilization** | distinct active users / paid seats | Joins to [[entity.subscription]] for seats |

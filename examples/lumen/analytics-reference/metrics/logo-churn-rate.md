@@ -8,7 +8,7 @@ updated: 2026-07-22
 unit: percent
 grain: monthly, company
 direction: down_is_good
-implementation: models/marts/fct_logo_churn_monthly.sql
+implementation: analytics.fct_logo_churn_monthly
 depends_on: [entity.customer]
 tags: [retention]
 ---

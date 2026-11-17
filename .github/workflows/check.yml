@@ -9,3 +9,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 tools/kb.py check examples/lumen
+      - name: run deterministic system checks on the example
+        working-directory: examples/lumen
+        run: |
+          CATALOG=system/fixtures/catalog.json system/jobs/run.sh schema-integrity
+          system/jobs/run.sh semantic-integrity
+          system/jobs/run.sh cohesion-redundancy

@@ -18,6 +18,7 @@ Lumen's forecast lives in the planning tool. Tool names vary by vendor and MCP s
 - Read the version change log (if the MCP exposes it). It's the best source for explaining *why* an assumption moved.
 
 ## Gotchas
+- The planning model's "ARR" line is defined as contracted MRR × 12, including one-time implementation fees.
 - Some exports return formatted strings ("$1.2M"). Request raw values.
 - Large exports may paginate. Confirm that the row count matches the dimension cardinality.
 

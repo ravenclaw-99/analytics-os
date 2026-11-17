@@ -12,6 +12,8 @@ Every company's analytical knowledge is scattered. Metric definitions sit in a B
 
 People get by on tribal knowledge. AI can't. Point an LLM at your warehouse and it will happily compute "churn" four different ways, none of them yours. The bottleneck for AI in analytics isn't model capability. It's **context**.
 
+And even after you write it all down, **it goes stale.** Every week, products launch, tables get deprecated, pipelines get re-architected, and people start analyzing things in new ways. A knowledge base that's accurate on day one is quietly wrong a month later, and an AI working from it is confidently wrong.
+
 ## The idea
 
 One version-controlled repository, shared across teams, with three folders:
@@ -28,7 +30,19 @@ your-kb/
 |---|---|
 | **analytics-reference/** | Metric definitions (ARR, NRR, cohort retention, funnel conversion) · **certified** tables and queries · data sources and their known issues · finance registers (vendors, billing cycles, AP/AR) · product and engagement mappings · how the financial model is built · horizontal frameworks (growth accounting, mix shift) · history of analyses and decisions |
 | **execution/** | **Skills**: step-by-step playbooks an AI follows for recurring work, like comparing this forecast with the one from three weeks ago in a standard format · **Tooling**: how to use each connected system (warehouse, Pigment/Anaplan, Google Sheets) through its MCP reliably |
-| **system/** | Production code: scheduled daily and weekly jobs, the prompts they run, and the automated checks that keep the reference accurate |
+| **system/** | Production code: scheduled jobs, the prompts they run, and **five automated checks** that keep the reference true |
+
+### The five checks
+
+| # | Check | Cadence | Catches |
+|---|---|---|---|
+| 1 | **Schema integrity** | daily | Tables and columns the knowledge base mentions that no longer exist; key-table columns nobody documented |
+| 2 | **Semantic integrity** | weekly | Two definitions of ARR; any part of the knowledge base that disagrees with another |
+| 3 | **Cohesion & redundancy** | weekly | Knowledge an agent can't find quickly; the same fact stored in three places |
+| 4 | **Proactive enrichment** | weekly | Merged PRs, launches, and decisions in Slack and decks that the knowledge base doesn't reflect yet |
+| 5 | **Analytical gaps** | weekly | Analysis people keep doing that isn't captured as a metric or skill. It asks the team whether to add it |
+
+Every check is **human-in-the-loop** to start: it writes a report with proposed fixes, and people decide. See [docs/05-system.md](docs/05-system.md).
 
 ### Why "recursive"
 
@@ -52,6 +66,12 @@ python3 tools/kb.py check examples/lumen
 
 # Build a machine-readable graph (index.json) and a browsable INDEX.md
 python3 tools/kb.py index examples/lumen
+
+# Run the automated checks against the example's deliberately drifted warehouse
+cd examples/lumen
+CATALOG=system/fixtures/catalog.json system/jobs/run.sh schema-integrity
+system/jobs/run.sh semantic-integrity
+system/jobs/run.sh cohesion-redundancy
 ```
 
 To start your own, copy `templates/` and follow [docs/06-adoption.md](docs/06-adoption.md).
@@ -64,11 +84,12 @@ docs/
   02-architecture.md        The three folders and how they fit together
   03-analytics-reference.md What goes in the content house; artifact format
   04-execution.md           Skills and tooling; working with AI
-  05-system.md              Jobs, prompts, automated checks
+  05-system.md              Keeping it alive: the five automated checks
   06-adoption.md            The first 30 days, by function
 templates/                  Blank artifacts and a skill template
 examples/lumen/             A worked example: a fictional B2B SaaS company
 tools/kb.py                 Validator + indexer (stdlib only)
+tools/checks/               Deterministic passes for checks 1–3
 ```
 
 ## Status

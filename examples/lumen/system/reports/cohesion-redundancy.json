@@ -1,0 +1,24 @@
+{
+  "check": "cohesion-redundancy",
+  "date": "2026-11-16",
+  "counts": {
+    "high": 0,
+    "medium": 1,
+    "low": 0
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "kind": "near_duplicate",
+      "where": "analytics-reference/data/sources/stripe.md \u2194 analytics-reference/finance/ap-ar.md",
+      "message": "Near-duplicate passages (57% overlap)",
+      "proposed_fix": "Keep the text in `source.stripe` (more fundamental) and replace it in `register.ap-ar` with a link: [[source.stripe]].",
+      "evidence": [
+        "`analytics-reference/data/sources/stripe.md`: \u201c- **Refunds post on a ~2-day lag.** Month-end revenue figures move by up to 0.4% in the first week of the following month. Close the books on business day 3, not day 1.\u201d",
+        "`analytics-reference/finance/ap-ar.md`: \u201c- Refunds post on a ~2-day lag, so month-end revenue figures can move by up to 0.4% in the first week of the following month. Close the books on business day 3.\u201d"
+      ]
+    }
+  ],
+  "artifacts": 26,
+  "passages_compared": 74
+}

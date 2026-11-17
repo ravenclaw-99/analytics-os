@@ -8,7 +8,7 @@ updated: 2026-06-10
 unit: percent
 grain: trailing 12 months, company
 direction: up_is_good
-implementation: models/marts/fct_nrr_monthly.sql
+implementation: analytics.fct_nrr_monthly
 depends_on: [metric.arr, entity.customer]
 tags: [revenue, retention, board]
 ---

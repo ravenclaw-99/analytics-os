@@ -14,7 +14,10 @@ Write a source artifact for every system behind those metrics, and put most of t
 Pick the recurring task that eats the most analyst time (often the forecast-vs-forecast comparison or the monthly flux) and write it as a skill. Run it with your AI agent. Fix the skill, not the output.
 
 ### Week 4: turn on the system
-Schedule `kb-check` daily. Log one real decision with an expected outcome and a review date.
+Schedule `kb-check` and **schema integrity** daily, so drift gets caught from day one. Log one real decision with an expected outcome and a review date.
+
+### Month 2: the weekly checks
+Add semantic integrity and cohesion/redundancy once you have about 20 artifacts. Add proactive enrichment and analytical gaps once the GitHub, Slack, and Drive connections are in place. Keep all of them human-in-the-loop until their proposals are reliably right.
 
 At the end of 30 days: about 20 artifacts, a skill that saves real hours, and a check that keeps it honest.
 
