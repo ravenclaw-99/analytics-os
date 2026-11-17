@@ -15,7 +15,9 @@
       "proposed_fix": "Replace the definition with a link to [[metric.arr]]. If the difference is real and intentional, give it a distinct governed name.",
       "evidence": [
         "\u201c- The planning model's \"ARR\" line is defined as contracted MRR \u00d7 12, including one-time implementation fees.\u201d"
-      ]
+      ],
+      "recommended_action": "refine",
+      "confidence": "high"
     },
     {
       "severity": "low",
@@ -25,7 +27,9 @@
       "proposed_fix": "Link [[metric.arr]] at the first mention.",
       "evidence": [
         "\u201c- Paused subscriptions count as **inactive** for ARR but are not churned until they're cancelled.\u201d"
-      ]
+      ],
+      "recommended_action": "accept",
+      "confidence": "high"
     },
     {
       "severity": "low",
@@ -35,7 +39,9 @@
       "proposed_fix": "Link [[metric.arr]] at the first mention.",
       "evidence": [
         "\u201cA general method for decomposing the change in any stock (customers, ARR, active users) into the flows that caused it:\u201d"
-      ]
+      ],
+      "recommended_action": "accept",
+      "confidence": "high"
     },
     {
       "severity": "low",
@@ -45,7 +51,9 @@
       "proposed_fix": "Link [[metric.arr]] at the first mention.",
       "evidence": [
         "\u201cPer [[model.arr-bridge]], halving that gap is worth about $250K of ARR per year.\u201d"
-      ]
+      ],
+      "recommended_action": "accept",
+      "confidence": "high"
     },
     {
       "severity": "low",
@@ -55,7 +63,9 @@
       "proposed_fix": "Link [[metric.arr]] at the first mention.",
       "evidence": [
         "\u201cFor customers whose first paid month is M\u2080, the share still active (ARR > 0) at month M\u2080+k.\u201d"
-      ]
+      ],
+      "recommended_action": "accept",
+      "confidence": "high"
     },
     {
       "severity": "low",
@@ -65,7 +75,9 @@
       "proposed_fix": "Link [[metric.arr]] at the first mention.",
       "evidence": [
         "\u201c- The planning model's \"ARR\" line is defined as contracted MRR \u00d7 12, including one-time implementation fees.\u201d"
-      ]
+      ],
+      "recommended_action": "accept",
+      "confidence": "high"
     }
   ],
   "review_sets": {

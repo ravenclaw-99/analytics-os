@@ -42,7 +42,7 @@ your-kb/
 | 4 | **Proactive enrichment** | weekly | Merged PRs, launches, and decisions in Slack and decks that the knowledge base doesn't reflect yet |
 | 5 | **Analytical gaps** | weekly | Analysis people keep doing that isn't captured as a metric or skill. It asks the team whether to add it |
 
-Every check is **human-in-the-loop** to start: it writes a report with proposed fixes, and people decide. See [docs/05-system.md](docs/05-system.md).
+Every check is **human-in-the-loop** to start. It writes a report in which each finding comes with a recommended **accept / reject / refine**, and people decide. A review ledger tracks how often the recommendations match the human decision, and finding types with a strong record graduate to running on their own. See [docs/05-system.md](docs/05-system.md) and [docs/06-runtime.md](docs/06-runtime.md).
 
 ### Why "recursive"
 
@@ -74,7 +74,7 @@ system/jobs/run.sh semantic-integrity
 system/jobs/run.sh cohesion-redundancy
 ```
 
-To start your own, copy `templates/` and follow [docs/06-adoption.md](docs/06-adoption.md).
+To start your own, copy `templates/` and follow [docs/07-adoption.md](docs/07-adoption.md).
 
 ## Repository layout
 
@@ -85,7 +85,8 @@ docs/
   03-analytics-reference.md What goes in the content house; artifact format
   04-execution.md           Skills and tooling; working with AI
   05-system.md              Keeping it alive: the five automated checks
-  06-adoption.md            The first 30 days, by function
+  06-runtime.md             How checks run: scheduler → sandbox → agent + MCP → report → Slack → review → autonomy
+  07-adoption.md            The first 30 days, by function
 templates/                  Blank artifacts and a skill template
 examples/lumen/             A worked example: a fictional B2B SaaS company
 tools/kb.py                 Validator + indexer (stdlib only)

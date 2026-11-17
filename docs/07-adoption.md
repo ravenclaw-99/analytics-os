@@ -1,4 +1,4 @@
-# 06 — Adoption
+# 07 — Adoption
 
 You don't need a data team, a semantic layer, or a migration project to start. You need a repo and the discipline to write things down.
 

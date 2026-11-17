@@ -22,6 +22,29 @@ class Finding:
     message: str
     proposed_fix: str = ""
     evidence: list[str] = field(default_factory=list)
+    recommended_action: str = ""  # accept | reject | refine (filled from DEFAULT_ACTION if empty)
+    confidence: str = ""  # high | medium | low
+
+
+# What the system recommends the reviewer do, per finding kind, unless a check overrides it.
+#   accept: the proposed fix can be applied as written
+#   refine: the direction is right but a person must supply something (a description, the right replacement)
+#   reject: not used as a default; reserved for checks that detect their own likely false positives
+DEFAULT_ACTION = {
+    "missing_table": ("accept", "medium"),
+    "missing_column": ("accept", "medium"),
+    "undocumented_column": ("refine", "high"),
+    "no_key_tables": ("refine", "high"),
+    "competing_definition": ("refine", "high"),
+    "unlinked_mention": ("accept", "high"),
+    "missing_canonical": ("refine", "high"),
+    "misplaced": ("accept", "medium"),
+    "oversized": ("refine", "medium"),
+    "dead_end": ("refine", "medium"),
+    "too_deep": ("accept", "low"),
+    "crowded_folder": ("refine", "low"),
+    "near_duplicate": ("accept", "medium"),
+}
 
 
 def load_config(root: Path) -> dict:
@@ -59,6 +82,10 @@ def sentences(text: str) -> list[str]:
 
 def write_report(root: Path, check: str, title: str, findings: list[Finding], extra: dict | None = None) -> Path:
     today = dt.date.today().isoformat()
+    for f in findings:
+        action, conf = DEFAULT_ACTION.get(f.kind, ("refine", "low"))
+        f.recommended_action = f.recommended_action or action
+        f.confidence = f.confidence or conf
     findings = sorted(findings, key=lambda f: (SEVERITY_ORDER[f.severity], f.kind, f.where))
     out_dir = root / "system" / "reports"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -75,8 +102,8 @@ def write_report(root: Path, check: str, title: str, findings: list[Finding], ex
         "",
         f"_Run {today} · {counts['high']} high · {counts['medium']} medium · {counts['low']} low._",
         "",
-        "> **Human in the loop.** Nothing here has been changed. Review each finding, then accept "
-        "the proposed fix (in a pull request), reject it, or mark it as expected.",
+        "> **Human in the loop.** Nothing here has been changed. For each finding: **accept** the "
+        "proposed fix, **reject** it (with a reason), or **refine** it (say what to change and the agent re-proposes).",
         "",
     ]
     if not findings:
@@ -85,6 +112,7 @@ def write_report(root: Path, check: str, title: str, findings: list[Finding], ex
         lines += [f"### {i}. [{f.severity}] {f.message}", "", f"- **Where:** `{f.where}`", f"- **Kind:** `{f.kind}`"]
         if f.proposed_fix:
             lines.append(f"- **Proposed fix:** {f.proposed_fix}")
+        lines.append(f"- **Recommended action:** **{f.recommended_action}** ({f.confidence} confidence)")
         for e in f.evidence:
             lines.append(f"  - {e}")
         lines.append("")

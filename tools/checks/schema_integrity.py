@@ -86,6 +86,8 @@ def main() -> int:
                 proposed_fix=(f"It looks like it was renamed to `{close[0]}`. Update the references and re-validate."
                               if close else "Find what replaced it (check recent pipeline PRs) or deprecate the references."),
                 evidence=[f"referenced at `{p}`" for p in places],
+                recommended_action="accept" if close else "refine",
+                confidence="medium" if close else "high",
             )
         )
 
@@ -113,6 +115,7 @@ def main() -> int:
                     f"Looks renamed to `{close[0]}`; update the register and any queries." if close
                     else "Remove it from the register, and check queries that use it.",
                     [f"documented in `{where}`"],
+                    recommended_action="accept" if close else "refine",
                 ))
             for col in sorted(live - documented):
                 if col in documented_anywhere:

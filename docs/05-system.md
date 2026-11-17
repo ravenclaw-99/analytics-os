@@ -78,9 +78,9 @@ When several people keep working on a concept or task that isn't captured, it sc
 
 Every check writes `system/reports/<check>.md` (for people) and `.json` (for machines). Nothing is changed automatically:
 
-1. A named reviewer triages each finding: **accept**, **reject** (with a reason), or **expected**.
+1. Each finding arrives with a recommended action. A named reviewer then **accepts**, **rejects** (with a reason), or **refines** it (says what to change, and the agent re-proposes).
 2. Accepted fixes merge as pull requests, gated by `tools/kb.py check`.
-3. Once a *category* of finding has a long run of accepted fixes (for example, "add a newly created column to the key-tables register"), let that category auto-fix. Keep definition changes human-approved permanently.
+3. Once a *category* of finding has a long run of correct recommendations (for example, "add a newly created column to the key-tables register"), let that category auto-fix. Keep definition changes human-approved permanently.
 
 ## Running it
 
@@ -94,4 +94,4 @@ AGENT_CMD="claude -p" system/jobs/run.sh proactive-enrichment   # needs GitHub/S
 
 See `examples/lumen/system/schedule.md` for cadences, reviewers, and a GitHub Actions example.
 
-Next: [06 — Adoption](06-adoption.md)
+Next: [06 — Runtime](06-runtime.md)

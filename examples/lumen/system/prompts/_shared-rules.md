@@ -20,11 +20,14 @@ These rules are prepended to every check prompt.
       "where": "artifact path, id, or external URL",
       "message": "one sentence: what is wrong or missing",
       "proposed_fix": "the specific change you recommend",
-      "evidence": ["quote or link", "..."]
+      "evidence": ["quote or link", "..."],
+      "recommended_action": "accept | reject | refine",
+      "confidence": "high | medium | low"
     }
   ]
 }
 ```
 
    Then write a readable `system/reports/<check>.md`: findings ordered high → low, each with its proposed fix.
-7. **Severity.** `high`: someone could make a wrong decision from the knowledge base as it stands. `medium`: an agent or analyst will waste time or get inconsistent results. `low`: hygiene.
+7. **Recommended action.** For every finding, recommend what the reviewer should do. **accept** means the fix can be applied exactly as written. **refine** means the direction is right but a person must supply something (the correct replacement, a description, an owner's call). **reject** means you found the signal but believe it isn't a real problem; say why. Give your confidence honestly. Over time, these recommendations are compared with what humans actually decide, and that's how the check earns autonomy (see `docs/06-runtime.md`).
+8. **Severity.** `high`: someone could make a wrong decision from the knowledge base as it stands. `medium`: an agent or analyst will waste time or get inconsistent results. `low`: hygiene.

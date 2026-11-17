@@ -14,7 +14,7 @@ Every check starts **human-in-the-loop**: it writes a report (and optionally a d
 ## Review loop
 
 1. The job writes `system/reports/<check>.md` and `.json`. If the runner has repo write access, it also opens a pull request with `status: draft` changes only.
-2. A named reviewer (above) triages each finding: **accept** (merge the fix), **reject** (note why, so the check learns), or **expected** (suppress).
+2. A named reviewer (above) acts on each finding, guided by the system's recommended action: **accept** (merge the fix), **reject** (note why, so the check learns), or **refine** (say what to change, and the agent re-proposes).
 3. Accepted fixes are merged. Then `tools/kb.py check` runs on the pull request as a gate.
 
 ## Example: GitHub Actions
