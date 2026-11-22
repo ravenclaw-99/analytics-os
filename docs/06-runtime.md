@@ -140,7 +140,7 @@ CHECK / KIND                                   VOTES  AGREE  ACC REJ REF  LVL  N
 cohesion-redundancy/near_duplicate                14    29%    4   0  10    0  needs 6 more decisions
 schema-integrity/undocumented_column              22    91%    0   2  20    1  humans agree, but its fixes need a person to supply something (refine), so it can't auto-accept
 semantic-integrity/competing_definition           12   100%    0   0  12    1  never graduates (changes a definition or certification, or needs the team's say)
-semantic-integrity/unlinked_mention               24    96%   23   1   0    1  ELIGIBLE for auto-accept: add it to autonomy.auto_accept to switch it on
+semantic-integrity/unlinked_mention               24    96%   23   1   0    1  READY to take off the training wheels: add it to autonomy.auto_accept to auto-accept
 ```
 
 (The example ships with eight weeks of **simulated** decisions, marked `"simulated": true`, so these commands have something to show. Delete the file to start fresh.)
@@ -161,7 +161,7 @@ For each **finding kind** (for example `semantic-integrity / unlinked_mention`),
 |---|---|---|
 | **0. Human in the loop** | A person reviews every finding | Starting point for every check |
 | **1. Agent pre-review** | A **reviewer agent** (`system/prompts/reviewer.md`: separate prompt, separate context, and it doesn't see the check's recommendation) independently says accept, reject, or refine. The person sees both opinions and decides | List the check in `autonomy.reviewer_agent` in `system/config.json` |
-| **2. Auto-accept ("YOLO mode")** | For that kind, findings that pass every gate below are accepted without asking. The skill applies them after one confirmation, and people spot-check | The kind is **eligible** (≥ 90% agreement over ≥ 20 reviews, counting the last 50) **and** the owner switches it on in `autonomy.auto_accept` |
+| **2. Auto-accept: taking off the training wheels** | For that kind, findings that pass every gate below are accepted without asking. The skill applies them after one confirmation, and people spot-check | The kind is **eligible** (≥ 90% agreement over ≥ 20 reviews, counting the last 50) **and** the owner switches it on in `autonomy.auto_accept` |
 | **3. Self-maintaining** | The check runs itself. People see only escalations | Every kind in the check that can graduate is at Level 2 |
 
 **Eligible isn't on.** The system tells you when a kind has earned it. You decide when you're comfortable. If agreement later drops below the bar (the business changed in a way the check doesn't understand), the kind **drops back automatically**, even if it was switched on.

@@ -4,7 +4,7 @@ Levels (per finding kind, e.g. `schema-integrity/undocumented_column`):
 
     0  Human in the loop   a person reviews every finding
     1  Agent pre-review    a reviewer agent gives a second opinion; the person still decides
-    2  Auto-accept         ("YOLO mode") findings of this kind that pass every gate below are
+    2  Auto-accept         ("taking off the training wheels") findings of this kind that pass every gate below are
                            accepted without asking; people spot-check
     3  Self-maintaining    a whole check whose every graduatable kind is at Level 2
 
@@ -131,13 +131,13 @@ def levels(root: Path, entries: list[dict] | None = None) -> list[dict]:
         elif eligible and enabled and not reviewer_on:
             note = f"switched on, but the reviewer agent is off for {check}; auto-accept needs both opinions"
         elif eligible and enabled:
-            note = "auto-accept ON"
+            note = "training wheels off: auto-accept ON"
         elif eligible:
-            note = "ELIGIBLE for auto-accept: add it to autonomy.auto_accept to switch it on"
+            note = "READY to take off the training wheels: add it to autonomy.auto_accept to auto-accept"
         elif meets_bar and not mostly_accept:
             note = "humans agree, but its fixes need a person to supply something (refine), so it can't auto-accept"
         elif enabled:
-            note = f"auto-accept PAUSED: agreement below {s['agreement_threshold']:.0%}, back to human review"
+            note = f"training wheels back on: agreement fell below {s['agreement_threshold']:.0%}, back to human review"
         elif r["votes"] < s["min_decisions"]:
             note = f"needs {s['min_decisions'] - r['votes']} more decisions"
         else:

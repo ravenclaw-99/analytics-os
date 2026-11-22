@@ -82,7 +82,7 @@ Every check writes `system/reports/<check>.md` (for people) and `.json` (for mac
 2. When the knowledge-base owner is ready, they run the **`review-kb-checks` skill** in their own LLM tool. They talk each finding through, then **accept** it, **reject** it (with a reason), or **refine** it (say what to change, and the agent re-proposes).
 3. Accepted fixes and the decisions go into one pull request, gated by `tools/kb.py check`.
 4. Every decision lands in the **review ledger**. Rejected findings stay hidden, reviewers' reasons become lessons the checks read, and recommendations are recalibrated toward what people actually decide.
-5. Once a *kind* of finding has a strong record (≥ 90% agreement over ≥ 20 reviews, for example "link the canonical definition at the first mention"), it becomes eligible for **auto-accept**, and the owner can switch it on. Definition changes and certifications stay human-approved permanently.
+5. Once a *kind* of finding has a strong record (≥ 90% agreement over ≥ 20 reviews, for example "link the canonical definition at the first mention"), it's ready to **take off the training wheels**: the owner can switch it to auto-accept. Definition changes and certifications stay human-approved permanently.
 
 [06 — Runtime](06-runtime.md) covers how this works: delivery, the skill, the ledger, and the autonomy ladder.
 
