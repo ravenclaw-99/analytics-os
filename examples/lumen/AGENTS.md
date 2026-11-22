@@ -19,6 +19,6 @@ Each artifact has frontmatter with an `id` (e.g. `metric.arr`). Body text links 
 2. **Use certified queries** for governed metrics (`analytics-reference/data/certified-queries/`). Don't write fresh SQL for a number that already has a certified query.
 3. **Cite artifact ids** for every number, definition, and claim.
 4. **Read the caveats and known issues** of everything you touch before you answer.
-5. **Check `analytics-reference/history/`** for prior work before starting new analysis.
+5. **Check `analytics-reference/history/`** for prior work before starting new analysis. If it isn't there, the `find-prior-analyses` skill also searches Slack, Drive, GitHub, and agent memory.
 6. **State your confidence** (low, medium, or high) and say why.
 7. **Write back as drafts.** New or edited artifacts get `status: draft` and go through a pull request. Only humans set `reviewed`.

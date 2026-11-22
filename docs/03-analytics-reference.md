@@ -12,11 +12,26 @@ Organize subfolders however suits your company. The checker finds artifacts at a
 | `data/certified-queries/` | SQL that's been validated and **certified** as the source of truth for a metric | `query.fct-arr-daily` |
 | `data/sources/` | Every system of record, what it's authoritative for, and its **known issues** | `source.stripe` |
 | `data/entities/` | Business objects and their grain: customer, subscription, user, workspace | `entity.customer` |
-| `models/` | How metrics connect: ARR bridges, driver trees, how the financial model is built | `model.arr-bridge` |
-| `finance/` | Everything needed to calculate financial metrics: vendor register (every vendor, cycle, terms), AP/AR conventions, expense tracking, close calendar | `register.vendors` |
+| `models/` | How metrics connect: ARR bridges, driver trees, how the financial model is built | `model.arr-bridge`, `model.operating-model` |
+| `finance/` | Everything needed to calculate financial metrics: vendor register (every vendor, cycle, terms), AP/AR conventions, expense tracking (how spend is coded by category, department, and vendor), close calendar | `register.vendors`, `register.expense-tracking` |
 | `product/` | Mapping of engagement and user data to product concepts: what "active" means, activation, seat utilization | `entity.engagement-event` |
-| `frameworks/` | **Horizontal** methods that apply across domains: growth accounting, mix-shift analysis, cohort methods | `framework.mix-shift` |
+| `frameworks/` | **Horizontal** methods that apply across domains: growth accounting, mix-shift analysis, LMDI decomposition, cohort methods | `framework.mix-shift`, `framework.lmdi` |
 | `history/` | Analyses (question, method, finding, confidence) and decisions (expected outcome, review date) | `decision.2026-10-annual-plan-discount` |
+
+### Frameworks worth writing down
+
+A framework artifact records how *your* company applies a general method, so every analyst and agent does it the same way. The Lumen example has four:
+
+| Framework | Answers | Example |
+|---|---|---|
+| Growth accounting | Which flows (new, expansion, contraction, churn) changed a stock? | `framework.growth-accounting` |
+| Mix shift | Did a blended rate move because the segments changed, or because their weights did? | `framework.mix-shift` |
+| LMDI (Logarithmic Mean Divisia Index) | How much of a change came from each of several multiplied factors (volume, mix, intensity, price), summing exactly with no residual? | `framework.lmdi` |
+| Cohort methods | Are newer customers behaving differently, or did something happen this month? | `framework.cohort-methods` |
+
+### Model build notes
+
+Write down how the financial or operating model is built, not just its outputs: the blocks (revenue build, headcount, non-headcount opex, cash), where each driver comes from, how versions and scenarios are named, and when actuals load. Forecast comparisons and board prep depend on it. See `model.operating-model` in the example.
 
 ## Artifact format
 
@@ -51,6 +66,8 @@ Types are ordered from fundamental to derived. An artifact may only `depend_on` 
 | 4 | `framework` | none | What it is · When to use it · How we apply it · Pitfalls |
 | 5 | `analysis` | `question`, `confidence` | Question · Method · Findings · Conclusion · What this changes |
 | 6 | `decision` | `decided_on`, `review_on`, `outcome` | Decision · Rationale · Expected outcome · Alternatives considered |
+
+Blank artifacts for every type are in `templates/blanks/`.
 
 Use `[[id]]` in body text to link anywhere. These are Obsidian-compatible wiki links, so the reference doubles as a browsable graph.
 

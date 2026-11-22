@@ -1,0 +1,28 @@
+# AGENTS.md: <Company> analytics knowledge base
+
+You are working with <Company>'s analytics knowledge base. <One or two sentences on what the company sells, to whom, how it charges, and its rough scale, for example: "<Company> sells a workflow tool to operations teams on monthly and annual plans, about $8M ARR.">
+
+## Layout
+
+| Folder | What's in it | How you use it |
+|---|---|---|
+| `analytics-reference/` | The content house: metric definitions, certified queries, data sources and entities, finance registers, product mappings, horizontal frameworks, and the history of analyses and decisions | **Read** it. It's the source of truth |
+| `execution/skills/` | Step-by-step playbooks for recurring tasks | **Follow** the matching skill when a request fits one |
+| `execution/tooling/` | How to use each connected system (<warehouse>, <planning tool>, <spreadsheets>) | **Read** it before calling that system's MCP |
+| `system/` | Production jobs, prompts, and automated checks | Don't modify it from an analysis session |
+
+Each artifact has frontmatter with an `id` (for example `metric.arr`). Body text links to other artifacts as `[[id]]`. If `index.json` exists, load it first: it's the whole graph.
+
+## Ground rules
+
+1. **Use governed definitions.** Metrics come from `analytics-reference/metrics/`. Never invent or substitute a definition. If one doesn't exist, say so and propose a `draft`.
+2. **Use certified queries** for governed metrics (`analytics-reference/data/certified-queries/`). Don't write fresh SQL for a number that already has a certified query.
+3. **Cite artifact ids** for every number, definition, and claim.
+4. **Read the caveats and known issues** of everything you touch before you answer.
+5. **Check `analytics-reference/history/`** for prior work before starting new analysis.
+6. **State your confidence** (low, medium, or high) and say why.
+7. **Write back as drafts.** New or edited artifacts get `status: draft` and go through a pull request. Only humans set `reviewed` or certify a query.
+
+## Company-specific rules
+
+<Add rules that apply only here, for example: "Finance reports in America/New_York; the warehouse is UTC." or "Never query production replicas; use the analytics schema." Delete this section if there are none yet.>
