@@ -1,6 +1,6 @@
 {
   "check": "schema-integrity",
-  "date": "2026-11-16",
+  "date": "2026-11-22",
   "counts": {
     "high": 2,
     "medium": 2,
@@ -17,7 +17,10 @@
         "documented in `analytics-reference/data/key-tables.md`"
       ],
       "recommended_action": "accept",
-      "confidence": "medium"
+      "confidence": "medium",
+      "id": "SCH-3eb1e7",
+      "basis": "check",
+      "status": "open"
     },
     {
       "severity": "high",
@@ -29,7 +32,10 @@
         "referenced at `analytics-reference/metrics/net-revenue-retention.md:11`"
       ],
       "recommended_action": "accept",
-      "confidence": "medium"
+      "confidence": "medium",
+      "id": "SCH-902bfe",
+      "basis": "check",
+      "status": "open"
     },
     {
       "severity": "medium",
@@ -39,7 +45,10 @@
       "proposed_fix": "Add a row for `plan_tier` under `### analytics.fct_arr_daily` in `analytics-reference/data/key-tables.md`, with a description.",
       "evidence": [],
       "recommended_action": "refine",
-      "confidence": "high"
+      "confidence": "high",
+      "id": "SCH-04c433",
+      "basis": "default",
+      "status": "open"
     },
     {
       "severity": "medium",
@@ -49,9 +58,13 @@
       "proposed_fix": "Add a row for `trial_start_ts` under `### analytics.fct_signup_funnel` in `analytics-reference/data/key-tables.md`, with a description.",
       "evidence": [],
       "recommended_action": "refine",
-      "confidence": "high"
+      "confidence": "high",
+      "id": "SCH-12a282",
+      "basis": "default",
+      "status": "open"
     }
   ],
+  "suppressed": [],
   "tables_referenced": 14,
   "tables_in_catalog": 14
 }

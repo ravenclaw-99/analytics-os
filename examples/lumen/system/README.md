@@ -14,21 +14,29 @@ Everything described in `analytics-reference/` and `execution/` is a **snapshot*
 
 ```
 system/
-  config.json      Warehouse schemas, canonical terms, structure rules, enrichment and gap sources
+  config.json      Warehouse schemas, canonical terms, structure rules, enrichment and gap sources, autonomy settings
   schedule.md      What runs when, who reviews, how fixes get merged
-  jobs/run.sh      Runner: deterministic pass, then agent pass
-  prompts/         Agent instructions for each check (plus shared rules)
+  jobs/run.sh      One check: deterministic pass, then agent pass
+  jobs/pipeline.sh A full scheduled run: check → reviewer agent → Slack summary (dry run by default)
+  prompts/         Agent instructions for each check, the reviewer agent, and shared rules
   reports/         Latest findings from each check (.md for people, .json for machines)
-  state/           Watermarks between runs
+  state/           What carries over between runs: watermarks, the review ledger, calibration, lessons
   fixtures/        Simulated warehouse catalog for this example
 ```
-
 Try it on the example (from `examples/lumen/`):
 
 ```bash
-CATALOG=system/fixtures/catalog.json system/jobs/run.sh schema-integrity
-system/jobs/run.sh semantic-integrity
-system/jobs/run.sh cohesion-redundancy
+CATALOG=system/fixtures/catalog.json system/jobs/pipeline.sh schema-integrity
+system/jobs/pipeline.sh semantic-integrity
+system/jobs/pipeline.sh cohesion-redundancy
+python3 ../../tools/runtime/cli.py findings .   # what's waiting for review, with codes
+python3 ../../tools/runtime/cli.py stats .      # how often reviewers agreed with the recommendations
 ```
 
 The example has deliberate drift built in: a renamed NRR table, a renamed and an undocumented column, a planning-tool "ARR" that includes one-time fees, and a copy-pasted known issue. The committed reports in `reports/` show what the checks find.
+
+## Reviewing findings
+
+Each finding has a code like `SCH-3eb1e7`. The Slack summary lists them. To act, the knowledge-base owner runs the [`review-kb-checks`](../execution/skills/review-kb-checks/SKILL.md) skill in their own LLM tool: it explains each finding, records accept, refine, or reject in `state/review-ledger.jsonl`, and opens one pull request with the fixes. See [docs/06-runtime.md](../../../docs/06-runtime.md).
+
+**About the ledger in this example:** `state/review-ledger.jsonl` ships with eight weeks of *simulated* decisions (every line has `"simulated": true`), so `stats`, `autonomy`, and `learn` have a history to work from. `state/calibration.json` and `state/review-lessons.md` were generated from it. Delete all three to start with a clean slate.

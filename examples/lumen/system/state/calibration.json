@@ -1,0 +1,7 @@
+{
+  "cohesion-redundancy/near_duplicate": {
+    "basis": "calibrated: humans chose refine on 10 of the last 14 near_duplicate findings",
+    "confidence": "medium",
+    "recommended_action": "refine"
+  }
+}

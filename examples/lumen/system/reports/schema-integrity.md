@@ -1,10 +1,10 @@
 # Schema integrity report
 
-_Run 2026-11-16 · 2 high · 2 medium · 0 low._
+_Run 2026-11-22 · 2 high · 2 medium · 0 low._
 
-> **Human in the loop.** Nothing here has been changed. For each finding: **accept** the proposed fix, **reject** it (with a reason), or **refine** it (say what to change and the agent re-proposes).
+> **Human in the loop.** Nothing here has been changed. For each finding: **accept** the proposed fix, **reject** it (with a reason), or **refine** it (say what to change and the agent re-proposes). To act, run the `review-kb-checks` skill in your LLM tool and give it a finding's code.
 
-### 1. [high] Documented column `analytics.fct_signup_funnel.trial_started_at` no longer exists
+### 1. `SCH-3eb1e7` [high] Documented column `analytics.fct_signup_funnel.trial_started_at` no longer exists
 
 - **Where:** `analytics.fct_signup_funnel.trial_started_at`
 - **Kind:** `missing_column`
@@ -12,7 +12,7 @@ _Run 2026-11-16 · 2 high · 2 medium · 0 low._
 - **Recommended action:** **accept** (medium confidence)
   - documented in `analytics-reference/data/key-tables.md`
 
-### 2. [high] `analytics.fct_nrr_monthly` is referenced in the knowledge base but no longer exists in the warehouse
+### 2. `SCH-902bfe` [high] `analytics.fct_nrr_monthly` is referenced in the knowledge base but no longer exists in the warehouse
 
 - **Where:** `analytics.fct_nrr_monthly`
 - **Kind:** `missing_table`
@@ -20,14 +20,14 @@ _Run 2026-11-16 · 2 high · 2 medium · 0 low._
 - **Recommended action:** **accept** (medium confidence)
   - referenced at `analytics-reference/metrics/net-revenue-retention.md:11`
 
-### 3. [medium] Key table column `analytics.fct_arr_daily.plan_tier` exists in the warehouse but isn't documented anywhere
+### 3. `SCH-04c433` [medium] Key table column `analytics.fct_arr_daily.plan_tier` exists in the warehouse but isn't documented anywhere
 
 - **Where:** `analytics.fct_arr_daily.plan_tier`
 - **Kind:** `undocumented_column`
 - **Proposed fix:** Add a row for `plan_tier` under `### analytics.fct_arr_daily` in `analytics-reference/data/key-tables.md`, with a description.
 - **Recommended action:** **refine** (high confidence)
 
-### 4. [medium] Key table column `analytics.fct_signup_funnel.trial_start_ts` exists in the warehouse but isn't documented anywhere
+### 4. `SCH-12a282` [medium] Key table column `analytics.fct_signup_funnel.trial_start_ts` exists in the warehouse but isn't documented anywhere
 
 - **Where:** `analytics.fct_signup_funnel.trial_start_ts`
 - **Kind:** `undocumented_column`

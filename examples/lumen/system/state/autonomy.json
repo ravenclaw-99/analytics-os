@@ -1,0 +1,38 @@
+{
+  "cohesion-redundancy/near_duplicate": {
+    "agreement": 0.2857142857142857,
+    "eligible": false,
+    "level": 0,
+    "votes": 14
+  },
+  "schema-integrity/missing_column": {
+    "agreement": 0.7777777777777778,
+    "eligible": false,
+    "level": 1,
+    "votes": 9
+  },
+  "schema-integrity/missing_table": {
+    "agreement": 0.6666666666666666,
+    "eligible": false,
+    "level": 1,
+    "votes": 6
+  },
+  "schema-integrity/undocumented_column": {
+    "agreement": 0.9090909090909091,
+    "eligible": false,
+    "level": 1,
+    "votes": 22
+  },
+  "semantic-integrity/competing_definition": {
+    "agreement": 1.0,
+    "eligible": false,
+    "level": 1,
+    "votes": 12
+  },
+  "semantic-integrity/unlinked_mention": {
+    "agreement": 0.9583333333333334,
+    "eligible": true,
+    "level": 1,
+    "votes": 24
+  }
+}

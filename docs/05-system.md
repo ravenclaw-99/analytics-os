@@ -78,20 +78,25 @@ When several people keep working on a concept or task that isn't captured, it sc
 
 Every check writes `system/reports/<check>.md` (for people) and `.json` (for machines). Nothing is changed automatically:
 
-1. Each finding arrives with a recommended action. A named reviewer then **accepts**, **rejects** (with a reason), or **refines** it (says what to change, and the agent re-proposes).
-2. Accepted fixes merge as pull requests, gated by `tools/kb.py check`.
-3. Once a *category* of finding has a long run of correct recommendations (for example, "add a newly created column to the key-tables register"), let that category auto-fix. Keep definition changes human-approved permanently.
+1. Each finding gets a stable **reference code** (`SCH-3eb1e7`) and a recommended action. A summary per check goes to Slack, where everyone can see it.
+2. When the knowledge-base owner is ready, they run the **`review-kb-checks` skill** in their own LLM tool. They talk each finding through, then **accept** it, **reject** it (with a reason), or **refine** it (say what to change, and the agent re-proposes).
+3. Accepted fixes and the decisions go into one pull request, gated by `tools/kb.py check`.
+4. Every decision lands in the **review ledger**. Rejected findings stay hidden, reviewers' reasons become lessons the checks read, and recommendations are recalibrated toward what people actually decide.
+5. Once a *kind* of finding has a strong record (≥ 90% agreement over ≥ 20 reviews, for example "link the canonical definition at the first mention"), it becomes eligible for **auto-accept**, and the owner can switch it on. Definition changes and certifications stay human-approved permanently.
+
+[06 — Runtime](06-runtime.md) covers how this works: delivery, the skill, the ledger, and the autonomy ladder.
 
 ## Running it
 
 ```bash
 cd examples/lumen
-CATALOG=system/fixtures/catalog.json system/jobs/run.sh schema-integrity
-system/jobs/run.sh semantic-integrity
-system/jobs/run.sh cohesion-redundancy
-AGENT_CMD="claude -p" system/jobs/run.sh proactive-enrichment   # needs GitHub/Slack/Drive MCPs
+CATALOG=system/fixtures/catalog.json system/jobs/pipeline.sh schema-integrity   # check → reviewer agent → Slack summary (dry run)
+system/jobs/pipeline.sh semantic-integrity
+system/jobs/pipeline.sh cohesion-redundancy
+AGENT_CMD="claude -p" system/jobs/pipeline.sh proactive-enrichment   # needs GitHub/Slack/Drive MCPs; any agent CLI works
+python3 ../../tools/runtime/cli.py stats .                           # how often people agreed with the recommendations
 ```
 
-See `examples/lumen/system/schedule.md` for cadences, reviewers, and a GitHub Actions example.
+See `examples/lumen/system/schedule.md` for cadences and reviewers, and `.github/workflows/kb-checks.yml` for the scheduled workflow.
 
 Next: [06 — Runtime](06-runtime.md)

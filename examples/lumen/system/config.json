@@ -98,5 +98,22 @@
     ],
     "use_query_history": true,
     "min_importance": 6
+  },
+  "autonomy": {
+    "_comment": "See docs/06-runtime.md. A kind is ELIGIBLE for auto-accept once humans agree with its recommendation at least agreement_threshold of the time over at least min_decisions reviews (counting the last `window`). It only auto-accepts once you list it in auto_accept, as \"check/kind\". Definition changes and certifications never graduate.",
+    "agreement_threshold": 0.9,
+    "min_decisions": 20,
+    "window": 50,
+    "reviewer_agent": [
+      "schema-integrity",
+      "semantic-integrity"
+    ],
+    "auto_accept": [],
+    "never_auto": []
+  },
+  "delivery": {
+    "_comment": "Summaries go to stdout unless the job runs with --send and GROUNDTRUTH_SLACK_WEBHOOK_URL is set.",
+    "adapter": "slack",
+    "channel": "#data-quality"
   }
 }

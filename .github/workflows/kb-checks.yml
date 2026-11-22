@@ -1,0 +1,110 @@
+# Reference runtime: run the automated checks on a schedule and post one summary per check.
+#
+#   scheduler  GitHub Actions `schedule` (alternatives: Airflow, Cloud Scheduler, cron, a managed agent platform)
+#   sandbox    a fresh GitHub-hosted runner per run, thrown away afterwards (alternatives: a container, Modal, a VM)
+#   agent      whatever CLI you put in the AGENT_CMD repo variable (frontier or open-source; see docs/06-runtime.md)
+#   delivery   Slack incoming webhook, DRY RUN unless you opt in (see "Going live" below)
+#
+# Safe by default: with no repo variables or secrets set, this runs the deterministic checks on the
+# example, prints the Slack summaries to the job log, and uploads the reports as an artifact.
+# Nothing is posted, nothing is committed, and no LLM is called.
+#
+# Going live (all optional, all in Settings → Secrets and variables → Actions):
+#   variable AGENT_CMD         e.g. `claude -p --allowedTools Read,Grep,Glob`, `codex exec`, `llm -m <model>`
+#   variable AGENT_INSTALL     command that installs it, e.g. `npm i -g @anthropic-ai/claude-code`
+#   secret   ANTHROPIC_API_KEY / OPENAI_API_KEY / OPENROUTER_API_KEY   whichever your agent needs
+#   secret   GROUNDTRUTH_SLACK_WEBHOOK_URL   a Slack incoming webhook for the channel
+#   variable GROUNDTRUTH_SEND  set to `true` to actually post (otherwise it stays a dry run)
+#   secret   WAREHOUSE_URL     read-only connection string, if you replace the fixture catalog below
+name: knowledge-base checks (scheduled)
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily: schema integrity
+    - cron: "0 7 * * 1" # Mondays: semantic integrity, cohesion & redundancy
+    - cron: "0 7 * * 5" # Fridays: proactive enrichment, analytical gaps
+  workflow_dispatch:
+    inputs:
+      checks:
+        description: "Checks to run, space-separated"
+        default: "schema-integrity semantic-integrity cohesion-redundancy"
+      send:
+        description: "Post to Slack (also needs the webhook secret)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read # read-only: the run can't push to the repo
+
+concurrency:
+  group: kb-checks
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: examples/lumen # your knowledge-base root
+    env:
+      AGENT_CMD: ${{ vars.AGENT_CMD }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      GROUNDTRUTH_DELIVERY: slack
+      GROUNDTRUTH_SLACK_WEBHOOK_URL: ${{ secrets.GROUNDTRUTH_SLACK_WEBHOOK_URL }}
+      GROUNDTRUTH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pick checks for this schedule
+        id: pick
+        run: |
+          case "${{ github.event.schedule }}" in
+            "0 6 * * *") checks="schema-integrity" ;;
+            "0 7 * * 1") checks="semantic-integrity cohesion-redundancy" ;;
+            "0 7 * * 5") checks="proactive-enrichment analytical-gaps" ;;
+            *)           checks="${{ inputs.checks }}" ;;
+          esac
+          echo "checks=$checks" >> "$GITHUB_OUTPUT"
+          echo "Running: $checks"
+
+      - name: Export the warehouse catalog
+        # The example uses a simulated catalog. For a real warehouse, run the one information_schema query in
+        # system/config.json → warehouse.catalog_query with a read-only role and write the same JSON shape.
+        # Supabase / Postgres, for example:
+        #   psql "$WAREHOUSE_URL" -At -c "select json_build_object('columns', json_agg(json_build_array(table_schema, table_name, column_name))) from (<catalog_query>) q" > system/state/catalog.json
+        run: cp system/fixtures/catalog.json system/state/catalog.json
+
+      - name: Install the agent (only if AGENT_CMD is set)
+        if: env.AGENT_CMD != ''
+        run: ${{ vars.AGENT_INSTALL }}
+
+      - name: Run checks → reviewer agent → summary
+        env:
+          SEND: ${{ (inputs.send || vars.GROUNDTRUTH_SEND == 'true') && '--send' || '' }}
+        run: |
+          python3 ../../tools/kb.py check .
+          for check in ${{ steps.pick.outputs.checks }}; do
+            echo "::group::$check"
+            system/jobs/pipeline.sh "$check" $SEND
+            echo "::endgroup::"
+          done
+
+      - name: Learning-loop status
+        run: |
+          python3 ../../tools/runtime/cli.py stats .
+          python3 ../../tools/runtime/cli.py autonomy .
+
+      - name: Keep the reports
+        # Reviewers download these (the review-kb-checks skill does it with `gh run download`).
+        # To commit reports to the repo instead, give the job `contents: write` and add a commit step.
+        uses: actions/upload-artifact@v4
+        with:
+          name: kb-check-reports
+          path: examples/lumen/system/reports/
+          retention-days: 30

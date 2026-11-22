@@ -9,7 +9,10 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "runtime"))
 import kb  # noqa: E402  (tools/kb.py)
+import autonomy  # noqa: E402  (tools/runtime/autonomy.py)
+import ledger  # noqa: E402  (tools/runtime/ledger.py)
 
 SEVERITY_ORDER = {"high": 0, "medium": 1, "low": 2}
 
@@ -24,6 +27,9 @@ class Finding:
     evidence: list[str] = field(default_factory=list)
     recommended_action: str = ""  # accept | reject | refine (filled from DEFAULT_ACTION if empty)
     confidence: str = ""  # high | medium | low
+    id: str = ""  # stable reference code, e.g. SCH-3f2a1b (filled by write_report)
+    basis: str = ""  # where the recommendation came from: default | check | calibrated: ...
+    status: str = ""  # open | accepted | refined (from the review ledger; rejected ones are hidden)
 
 
 # What the system recommends the reviewer do, per finding kind, unless a check overrides it.
@@ -82,17 +88,32 @@ def sentences(text: str) -> list[str]:
 
 def write_report(root: Path, check: str, title: str, findings: list[Finding], extra: dict | None = None) -> Path:
     today = dt.date.today().isoformat()
+    calibration = autonomy.load_calibration(root)
+    latest = ledger.latest_by_ref(ledger.read_ledger(root))
     for f in findings:
-        action, conf = DEFAULT_ACTION.get(f.kind, ("refine", "low"))
-        f.recommended_action = f.recommended_action or action
-        f.confidence = f.confidence or conf
+        f.id = ledger.finding_ref(check, f.kind, f.where)
+        cal = calibration.get(autonomy.key(check, f.kind))
+        if f.recommended_action:
+            f.basis = "check"  # the check chose this recommendation for this specific finding
+        elif cal:
+            f.recommended_action, f.confidence, f.basis = cal["recommended_action"], cal["confidence"], cal["basis"]
+        else:
+            f.recommended_action, f.confidence = DEFAULT_ACTION.get(f.kind, ("refine", "low"))
+            f.basis = "default"
+        f.confidence = f.confidence or DEFAULT_ACTION.get(f.kind, ("refine", "low"))[1]
+        f.status = ledger.status_of(latest.get(f.id))
+    # A finding a reviewer rejected stays hidden on later runs, so the check stops repeating it.
+    # Delete its ledger lines (or record a new decision) to bring it back.
+    suppressed = [f for f in findings if f.status == "rejected"]
+    findings = [f for f in findings if f.status != "rejected"]
     findings = sorted(findings, key=lambda f: (SEVERITY_ORDER[f.severity], f.kind, f.where))
     out_dir = root / "system" / "reports"
     out_dir.mkdir(parents=True, exist_ok=True)
     base = out_dir / f"{check}"
     counts = {s: sum(f.severity == s for f in findings) for s in SEVERITY_ORDER}
 
-    payload = {"check": check, "date": today, "counts": counts, "findings": [asdict(f) for f in findings]}
+    payload = {"check": check, "date": today, "counts": counts, "findings": [asdict(f) for f in findings],
+               "suppressed": [asdict(f) for f in suppressed]}
     if extra:
         payload.update(extra)
     base.with_suffix(".json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -103,21 +124,29 @@ def write_report(root: Path, check: str, title: str, findings: list[Finding], ex
         f"_Run {today} · {counts['high']} high · {counts['medium']} medium · {counts['low']} low._",
         "",
         "> **Human in the loop.** Nothing here has been changed. For each finding: **accept** the "
-        "proposed fix, **reject** it (with a reason), or **refine** it (say what to change and the agent re-proposes).",
+        "proposed fix, **reject** it (with a reason), or **refine** it (say what to change and the agent re-proposes). "
+        "To act, run the `review-kb-checks` skill in your LLM tool and give it a finding's code.",
         "",
     ]
     if not findings:
         lines.append("No findings. ✅")
     for i, f in enumerate(findings, 1):
-        lines += [f"### {i}. [{f.severity}] {f.message}", "", f"- **Where:** `{f.where}`", f"- **Kind:** `{f.kind}`"]
+        lines += [f"### {i}. `{f.id}` [{f.severity}] {f.message}", "", f"- **Where:** `{f.where}`", f"- **Kind:** `{f.kind}`"]
         if f.proposed_fix:
             lines.append(f"- **Proposed fix:** {f.proposed_fix}")
-        lines.append(f"- **Recommended action:** **{f.recommended_action}** ({f.confidence} confidence)")
+        why = f"; {f.basis}" if f.basis.startswith("calibrated") else ""
+        lines.append(f"- **Recommended action:** **{f.recommended_action}** ({f.confidence} confidence{why})")
+        if f.status != "open":
+            lines.append(f"- **Review status:** {f.status}")
         for e in f.evidence:
             lines.append(f"  - {e}")
         lines.append("")
+    if suppressed:
+        lines += [f"_{len(suppressed)} finding(s) hidden because a reviewer rejected them earlier: "
+                  + ", ".join(f"`{f.id}`" for f in suppressed) + "._", ""]
     base.with_suffix(".md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"{check}: {counts['high']} high · {counts['medium']} medium · {counts['low']} low → {base.with_suffix('.md').relative_to(root)}")
+    print(f"{check}: {counts['high']} high · {counts['medium']} medium · {counts['low']} low"
+          f"{f' · {len(suppressed)} hidden (rejected before)' if suppressed else ''} → {base.with_suffix('.md').relative_to(root)}")
     return base
 
 

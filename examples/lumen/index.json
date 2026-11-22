@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-16",
+  "generated": "2026-11-22",
   "nodes": [
     {
       "id": "query.fct-arr-daily",
@@ -486,6 +486,13 @@
       "name": "compare-forecast-versions",
       "description": "Compare the latest forecast with an earlier version (e.g. from three weeks ago), attribute the deltas to drivers, and produce the standard forecast-variance output. Use when someone asks what changed in the forecast, or before the weekly forecast review.",
       "path": "execution/skills/compare-forecast-versions/SKILL.md"
+    },
+    {
+      "id": "skill.review-kb-checks",
+      "type": "skill",
+      "name": "review-kb-checks",
+      "description": "Walk the knowledge-base owner through the latest automated-check findings one at a time (explain, discuss, accept, refine, or reject), record every decision in the review ledger, and open one pull request with the accepted fixes. Use when someone says \"review the KB checks\", pastes a finding code like SCH-3eb1e7 from the Slack summary, or asks what the checks found.",
+      "path": "execution/skills/review-kb-checks/SKILL.md"
     }
   ],
   "edges": [

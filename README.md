@@ -42,7 +42,9 @@ your-kb/
 | 4 | **Proactive enrichment** | weekly | Merged PRs, launches, and decisions in Slack and decks that the knowledge base doesn't reflect yet |
 | 5 | **Analytical gaps** | weekly | Analysis people keep doing that isn't captured as a metric or skill. It asks the team whether to add it |
 
-Every check is **human-in-the-loop** to start. It writes a report in which each finding comes with a recommended **accept / reject / refine**, and people decide. A review ledger tracks how often the recommendations match the human decision, and finding types with a strong record graduate to running on their own. See [docs/05-system.md](docs/05-system.md) and [docs/06-runtime.md](docs/06-runtime.md).
+Every check is **human-in-the-loop** to start. Each finding gets a reference code and a recommended **accept / reject / refine**. A summary of each check goes to Slack for everyone to see. The knowledge-base owner then runs a **review skill** in their own LLM tool to talk each finding through and turn the accepted fixes into one pull request. A review ledger records every decision. Rejected findings stay rejected, recommendations recalibrate toward what people actually decide, and kinds of finding that reach 90%+ agreement become eligible to auto-accept. See [docs/05-system.md](docs/05-system.md) and [docs/06-runtime.md](docs/06-runtime.md).
+
+The runtime is vendor-neutral: any scheduler, any sandbox, any agent CLI (frontier or open-source), any read-only MCP servers. A reference implementation runs on GitHub Actions and works end to end on the example without accounts or API keys.
 
 ### Why "recursive"
 
@@ -72,6 +74,11 @@ cd examples/lumen
 CATALOG=system/fixtures/catalog.json system/jobs/run.sh schema-integrity
 system/jobs/run.sh semantic-integrity
 system/jobs/run.sh cohesion-redundancy
+
+# The runtime: one summary per check (printed, not posted), the review queue, and the learning loop
+python3 ../../tools/runtime/cli.py notify . --to slack     # dry run unless --send and a webhook are set
+python3 ../../tools/runtime/cli.py findings .              # open findings with their reference codes
+python3 ../../tools/runtime/cli.py stats .                 # agreement with human reviewers (simulated history)
 ```
 
 To start your own, copy `templates/` and follow [docs/07-adoption.md](docs/07-adoption.md).
@@ -91,6 +98,8 @@ templates/                  Blank artifacts and a skill template
 examples/lumen/             A worked example: a fictional B2B SaaS company
 tools/kb.py                 Validator + indexer (stdlib only)
 tools/checks/               Deterministic passes for checks 1–3
+tools/runtime/              Delivery, review ledger, learning loop, autonomy ladder
+.github/workflows/          CI, plus a scheduled run of the checks (dry run by default)
 ```
 
 ## Status

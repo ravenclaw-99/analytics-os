@@ -15,3 +15,10 @@ jobs:
           CATALOG=system/fixtures/catalog.json system/jobs/run.sh schema-integrity
           system/jobs/run.sh semantic-integrity
           system/jobs/run.sh cohesion-redundancy
+      - name: runtime smoke test (dry run, nothing is posted)
+        working-directory: examples/lumen
+        run: |
+          python3 ../../tools/runtime/cli.py notify . --to slack
+          python3 ../../tools/runtime/cli.py findings .
+          python3 ../../tools/runtime/cli.py stats .
+          python3 ../../tools/runtime/cli.py autonomy .
