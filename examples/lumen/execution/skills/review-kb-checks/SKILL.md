@@ -11,7 +11,7 @@ The scheduled checks post a summary to Slack with a code for each finding. This 
 - **Which findings**: one or more codes (e.g. `SCH-3eb1e7`), a check name, or "all open". The default is all open findings, highest severity first.
 - **Reviewer name**: who is deciding. Ask once if you don't know.
 
-In the commands below, `GT` is the Groundtruth runtime: `python3 <tools>/runtime/cli.py`. In this example it's `python3 ../../tools/runtime/cli.py`, run from the knowledge-base root.
+In the commands below, `GT` is the Canonical runtime: `python3 <tools>/runtime/cli.py`. In this example it's `python3 ../../tools/runtime/cli.py`, run from the knowledge-base root.
 
 ## Steps
 

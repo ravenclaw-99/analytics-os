@@ -113,7 +113,7 @@
     "never_auto": []
   },
   "delivery": {
-    "_comment": "Summaries go to stdout unless the job runs with --send and GROUNDTRUTH_SLACK_WEBHOOK_URL is set.",
+    "_comment": "Summaries go to stdout unless the job runs with --send and CANONICAL_SLACK_WEBHOOK_URL is set.",
     "adapter": "slack",
     "channel": "#data-quality"
   }

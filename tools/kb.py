@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Groundtruth tool: validate and index a knowledge base.
+"""Canonical tool: validate and index a knowledge base.
 
 Usage:
     python3 tools/kb.py check <kb_root> [--today YYYY-MM-DD]

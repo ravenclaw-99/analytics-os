@@ -101,7 +101,7 @@ To act on a finding, run the `review-kb-checks` skill in your LLM tool and give 
 
 Slack is for **awareness**, not for deciding. Nobody clicks buttons in Slack. The codes are how people point at a finding later.
 
-**Safety:** a message is posted only when the command runs with `--send` **and** `GROUNDTRUTH_SLACK_WEBHOOK_URL` is set. Otherwise it is printed. The reference workflow stays a dry run until you set the repo variable `GROUNDTRUTH_SEND=true`.
+**Safety:** a message is posted only when the command runs with `--send` **and** `CANONICAL_SLACK_WEBHOOK_URL` is set. Otherwise it is printed. The reference workflow stays a dry run until you set the repo variable `CANONICAL_SEND=true`.
 
 ### 7. Review: a conversation, then a pull request
 When the knowledge-base owner is ready, they open **their own LLM tool** and run the **`review-kb-checks` skill** (`execution/skills/review-kb-checks/SKILL.md`), giving it a code from Slack or "all open". The skill:
@@ -192,7 +192,7 @@ $GT stats .                           # agreement per check and kind
 $GT autonomy .                        # levels, and what would auto-accept now
 ```
 
-Add `AGENT_CMD="claude -p"` (or any other agent command) to run the agent passes and the reviewer agent. Add `--send` plus `GROUNDTRUTH_SLACK_WEBHOOK_URL` to post for real.
+Add `AGENT_CMD="claude -p"` (or any other agent command) to run the agent passes and the reviewer agent. Add `--send` plus `CANONICAL_SLACK_WEBHOOK_URL` to post for real.
 
 ## Mapping to this repo
 

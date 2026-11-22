@@ -1,11 +1,11 @@
 # Starter knowledge base
 
-Copy this whole folder to start your own Groundtruth knowledge base:
+Copy this whole folder to start your own Canonical knowledge base:
 
 ```bash
 cp -R templates ~/my-kb
 cd ~/my-kb
-python3 /path/to/groundtruth/tools/kb.py check .
+python3 /path/to/this-repo/tools/kb.py check .
 ```
 
 It starts empty, so the first check reports `0 artifacts · 0 errors`. Then follow the first 30 days in [docs/07-adoption.md](../docs/07-adoption.md).

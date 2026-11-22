@@ -35,17 +35,17 @@ A company with a strong analytical foundation can:
 4. **Onboard a new analyst, or a new AI agent, in a day**, by pointing them at the knowledge base.
 5. **Get smarter over time**, because each analysis and each decision review adds to what's already known.
 
-Groundtruth is a framework for building that foundation with tools you already have: text files, Git, and discipline.
+Canonical is a framework for building that foundation with tools you already have: text files, Git, and discipline.
 
 ## Why not just a semantic layer?
 
-Semantic layers (dbt metrics, LookML, Cube, and others) are excellent, and Groundtruth complements them. A semantic layer encodes **how to compute** a metric. Groundtruth also captures:
+Semantic layers (dbt metrics, LookML, Cube, and others) are excellent, and Canonical complements them. A semantic layer encodes **how to compute** a metric. Canonical also captures:
 
 - **why** the metric is defined this way, and what was considered and rejected
 - **caveats** that don't fit in SQL
 - **models** of how metrics drive each other
 - **analyses and decisions**, the reasoning that consumes the metrics
 
-Think of the semantic layer as the compiler and Groundtruth as the documentation, the design history, and the lab notebook, all in one graph. A metric artifact can point at its semantic-layer object or certified query through its `implementation` field (see [03 — Analytics reference](03-analytics-reference.md)).
+Think of the semantic layer as the compiler and Canonical as the documentation, the design history, and the lab notebook, all in one graph. A metric artifact can point at its semantic-layer object or certified query through its `implementation` field (see [03 — Analytics reference](03-analytics-reference.md)).
 
 Next: [02 — Architecture](02-architecture.md)

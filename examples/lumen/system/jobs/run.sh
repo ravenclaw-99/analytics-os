@@ -7,14 +7,14 @@
 #         proactive-enrichment | analytical-gaps
 #
 # Environment:
-#   GROUNDTRUTH_TOOLS  path to the Groundtruth tools/ folder   (default: ../../tools)
+#   CANONICAL_TOOLS  path to the Canonical tools/ folder   (default: ../../tools)
 #   CATALOG            warehouse catalog JSON for schema checks (default: system/state/catalog.json)
 #   AGENT_CMD          headless agent command that takes a prompt as its last argument and
 #                      has the MCP servers this check needs, e.g. Claude Code: "claude -p"
 set -euo pipefail
 
 CHECK="${1:?usage: system/jobs/run.sh <check>}"
-TOOLS="${GROUNDTRUTH_TOOLS:-../../tools}"
+TOOLS="${CANONICAL_TOOLS:-../../tools}"
 CATALOG="${CATALOG:-system/state/catalog.json}"
 
 agent() {

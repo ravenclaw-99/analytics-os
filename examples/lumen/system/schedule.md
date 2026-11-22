@@ -29,4 +29,4 @@ on:
     - cron: "0 7 * * 1"   # Mondays: semantic + cohesion
     - cron: "0 7 * * 5"   # Fridays: enrichment + gaps
 ```
-Each entry exports the warehouse catalog, then calls `system/jobs/pipeline.sh <check>`, with `AGENT_CMD` pointed at a headless agent that has the right MCP servers and a read-only role. It stays a dry run (summaries printed to the log, not posted) until the repo variable `GROUNDTRUTH_SEND` is `true` and the webhook secret is set. The same pipeline runs under any other scheduler: Airflow, Cloud Scheduler, or cron.
+Each entry exports the warehouse catalog, then calls `system/jobs/pipeline.sh <check>`, with `AGENT_CMD` pointed at a headless agent that has the right MCP servers and a read-only role. It stays a dry run (summaries printed to the log, not posted) until the repo variable `CANONICAL_SEND` is `true` and the webhook secret is set. The same pipeline runs under any other scheduler: Airflow, Cloud Scheduler, or cron.

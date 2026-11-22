@@ -1,6 +1,6 @@
 # 02 — Architecture
 
-A Groundtruth knowledge base is a Git repository shared by the analytics, finance, product, and BizOps teams. It has three top-level folders:
+A Canonical knowledge base is a Git repository shared by the analytics, finance, product, and BizOps teams. It has three top-level folders:
 
 ```
 your-kb/

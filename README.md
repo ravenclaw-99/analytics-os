@@ -1,8 +1,6 @@
-# Groundtruth
+# Canonical
 
-**A recursive knowledge base that serves as the analytical foundation for product, data science, finance, and BizOps teams, and for the AI agents that work alongside them.**
-
-> *Groundtruth* is a working name. The ideas matter more than the label.
+**A recursive, self-improving knowledge base that serves as the analytical foundation for product, data science, finance, and BizOps teams, and for the AI agents that work alongside them.**
 
 ---
 

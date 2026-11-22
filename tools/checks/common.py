@@ -1,4 +1,4 @@
-"""Shared plumbing for Groundtruth system checks: loading, findings, reports."""
+"""Shared plumbing for Canonical system checks: loading, findings, reports."""
 from __future__ import annotations
 
 import datetime as dt

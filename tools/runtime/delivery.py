@@ -4,7 +4,7 @@ The summary is a notice board, not a review tool. It shows counts by severity, t
 with their reference codes, and a link to the full report. Reviewers act later by running the
 `review-kb-checks` skill in their own LLM tool and giving it a code.
 
-Adapters (pick with --to, or GROUNDTRUTH_DELIVERY):
+Adapters (pick with --to, or CANONICAL_DELIVERY):
     stdout   print the message (the default, and what every dry run does)
     slack    POST to a Slack incoming webhook (https://api.slack.com/messaging/webhooks)
 
@@ -13,7 +13,7 @@ that takes the rendered message and sends it. The checks don't change.
 
 Safety: a message is only sent when BOTH are true:
     1. the command was run with --send, and
-    2. the webhook URL is in the environment variable GROUNDTRUTH_SLACK_WEBHOOK_URL.
+    2. the webhook URL is in the environment variable CANONICAL_SLACK_WEBHOOK_URL.
 Otherwise it is printed and nothing leaves the machine.
 """
 from __future__ import annotations
@@ -33,7 +33,7 @@ CHECK_TITLE = {
     "proactive-enrichment": "Proactive enrichment",
     "analytical-gaps": "Analytical gaps",
 }
-WEBHOOK_ENV = "GROUNDTRUTH_SLACK_WEBHOOK_URL"
+WEBHOOK_ENV = "CANONICAL_SLACK_WEBHOOK_URL"
 
 
 def _short(text: str, n: int = 140) -> str:
@@ -44,14 +44,14 @@ def _short(text: str, n: int = 140) -> str:
 def report_link(check: str) -> str:
     """Where the full report can be read.
 
-    GROUNDTRUTH_REPORT_URL_BASE  e.g. https://github.com/acme/kb/blob/main  (reports are committed)
-    GROUNDTRUTH_RUN_URL          e.g. the CI run page, where reports are attached as an artifact
+    CANONICAL_REPORT_URL_BASE  e.g. https://github.com/acme/kb/blob/main  (reports are committed)
+    CANONICAL_RUN_URL          e.g. the CI run page, where reports are attached as an artifact
     """
     path = f"system/reports/{check}.md"
-    base = os.environ.get("GROUNDTRUTH_REPORT_URL_BASE", "").rstrip("/")
+    base = os.environ.get("CANONICAL_REPORT_URL_BASE", "").rstrip("/")
     if base:
         return f"<{base}/{path}|{path}>"
-    run = os.environ.get("GROUNDTRUTH_RUN_URL", "")
+    run = os.environ.get("CANONICAL_RUN_URL", "")
     if run:
         return f"<{run}|this run's reports> (`{path}`)"
     return f"`{path}`"

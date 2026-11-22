@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Groundtruth runtime: deliver reports, record reviews, and track the autonomy ladder.
+"""Canonical runtime: deliver reports, record reviews, and track the autonomy ladder.
 
 Usage (run from anywhere; <kb> is the knowledge-base root, e.g. examples/lumen):
 
   Delivery
     cli.py notify   <kb> [--check C ...] [--to stdout|slack] [--send]
-                    One summary per check. Prints unless --send AND GROUNDTRUTH_SLACK_WEBHOOK_URL is set.
+                    One summary per check. Prints unless --send AND CANONICAL_SLACK_WEBHOOK_URL is set.
 
   Review (what the review-kb-checks skill calls)
     cli.py findings <kb> [--check C] [--all] [--json]   open findings with their reference codes
@@ -51,7 +51,7 @@ def pct(x: float | None) -> str:
 
 def cmd_notify(a) -> int:
     import os
-    to = a.to or os.environ.get("GROUNDTRUTH_DELIVERY", "stdout")
+    to = a.to or os.environ.get("CANONICAL_DELIVERY", "stdout")
     return delivery.deliver(a.kb, a.check or ledger.CHECKS, to=to, send=a.send)
 
 

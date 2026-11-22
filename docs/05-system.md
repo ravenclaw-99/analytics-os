@@ -6,7 +6,7 @@ Everything in `analytics-reference/` and `execution/` is a snapshot. Connecting 
 
 The business keeps moving. Every week, products launch, tables get deprecated, pipelines get re-architected, and people start analyzing data in new ways based on conversations the knowledge base never sees. Within weeks, a knowledge base that was accurate on day one is quietly wrong. An agent working from a stale knowledge base is worse than one with none, because it's confident.
 
-**This is the problem Groundtruth exists to solve.** The solution is a set of automated checks that run on a schedule. At first they're **human-in-the-loop reviews**: they find problems and propose fixes, and people decide.
+**This is the problem Canonical exists to solve.** The solution is a set of automated checks that run on a schedule. At first they're **human-in-the-loop reviews**: they find problems and propose fixes, and people decide.
 
 ## The five checks
 
