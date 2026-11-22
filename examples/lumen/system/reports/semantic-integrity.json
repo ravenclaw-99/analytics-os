@@ -106,18 +106,23 @@
       "analytics-reference/data/entities/subscription.md",
       "analytics-reference/data/key-tables.md",
       "analytics-reference/data/sources/stripe.md",
+      "analytics-reference/frameworks/cohort-methods.md",
       "analytics-reference/frameworks/growth-accounting.md",
+      "analytics-reference/frameworks/lmdi.md",
       "analytics-reference/history/decisions/2026-04-usage-alerts.md",
       "analytics-reference/metrics/cac-payback.md",
       "analytics-reference/metrics/cohort-retention.md",
       "analytics-reference/metrics/net-revenue-retention.md",
       "analytics-reference/models/arr-bridge.md",
+      "analytics-reference/models/operating-model.md",
       "execution/tooling/planning-mcp.md",
+      "execution/skills/board-prep-pivot/SKILL.md",
       "execution/skills/compare-forecast-versions/SKILL.md"
     ],
     "NRR": [
       "metric.net-revenue-retention",
-      "analytics-reference/history/analyses/2026-09-churn-by-cohort.md"
+      "analytics-reference/history/analyses/2026-09-churn-by-cohort.md",
+      "execution/skills/board-prep-pivot/SKILL.md"
     ],
     "net revenue retention": [
       "metric.net-revenue-retention"
@@ -126,7 +131,9 @@
       "metric.logo-churn-rate",
       "analytics-reference/history/analyses/2026-07-usage-alerts-review.md",
       "analytics-reference/history/decisions/2026-04-usage-alerts.md",
-      "analytics-reference/models/arr-bridge.md"
+      "analytics-reference/models/arr-bridge.md",
+      "analytics-reference/models/operating-model.md",
+      "execution/skills/board-prep-pivot/SKILL.md"
     ],
     "DAU": [
       "metric.dau"
@@ -137,6 +144,10 @@
     ],
     "trial-to-paid": [
       "metric.trial-to-paid"
+    ],
+    "LMDI": [
+      "framework.lmdi",
+      "execution/skills/board-prep-pivot/SKILL.md"
     ]
   }
 }

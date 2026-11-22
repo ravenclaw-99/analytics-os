@@ -94,7 +94,7 @@ docs/
   05-system.md              Keeping it alive: the five automated checks
   06-runtime.md             How checks run: scheduler → sandbox → agent + MCP → report → Slack → review → autonomy
   07-adoption.md            The first 30 days, by function
-templates/                  Blank artifacts and a skill template
+templates/                  Starter knowledge base to copy: AGENTS.md, the three folders, blank artifacts
 examples/lumen/             A worked example: a fictional B2B SaaS company
 tools/kb.py                 Validator + indexer (stdlib only)
 tools/checks/               Deterministic passes for checks 1–3

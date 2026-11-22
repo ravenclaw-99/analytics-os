@@ -16,7 +16,8 @@
     "logo churn": "metric.logo-churn-rate",
     "DAU": "metric.dau",
     "active user": "metric.dau",
-    "trial-to-paid": "metric.trial-to-paid"
+    "trial-to-paid": "metric.trial-to-paid",
+    "LMDI": "framework.lmdi"
   },
   "structure": {
     "folders": {

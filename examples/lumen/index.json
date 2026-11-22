@@ -128,6 +128,26 @@
       "path": "analytics-reference/finance/ap-ar.md"
     },
     {
+      "id": "register.expense-tracking",
+      "type": "register",
+      "title": "Expense tracking conventions",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "system": "NetSuite (GL) + payroll (Gusto)",
+      "depends_on": [
+        "register.vendors",
+        "register.ap-ar"
+      ],
+      "tags": [
+        "finance",
+        "expenses",
+        "opex",
+        "close"
+      ],
+      "path": "analytics-reference/finance/expense-tracking.md"
+    },
+    {
       "id": "register.vendors",
       "type": "register",
       "title": "Vendor register",
@@ -143,6 +163,24 @@
       "path": "analytics-reference/finance/vendors.md"
     },
     {
+      "id": "framework.cohort-methods",
+      "type": "framework",
+      "title": "Cohort methods",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "depends_on": [
+        "framework.growth-accounting"
+      ],
+      "tags": [
+        "framework",
+        "horizontal",
+        "cohorts",
+        "retention"
+      ],
+      "path": "analytics-reference/frameworks/cohort-methods.md"
+    },
+    {
       "id": "framework.growth-accounting",
       "type": "framework",
       "title": "Growth accounting",
@@ -154,6 +192,23 @@
         "horizontal"
       ],
       "path": "analytics-reference/frameworks/growth-accounting.md"
+    },
+    {
+      "id": "framework.lmdi",
+      "type": "framework",
+      "title": "LMDI (Logarithmic Mean Divisia Index) decomposition",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "depends_on": [
+        "framework.mix-shift"
+      ],
+      "tags": [
+        "framework",
+        "horizontal",
+        "decomposition"
+      ],
+      "path": "analytics-reference/frameworks/lmdi.md"
     },
     {
       "id": "framework.mix-shift",
@@ -413,6 +468,30 @@
       "path": "analytics-reference/models/arr-bridge.md"
     },
     {
+      "id": "model.operating-model",
+      "type": "model",
+      "title": "Operating model build notes",
+      "owner": "finance",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "kind": "operating_model",
+      "depends_on": [
+        "model.arr-bridge",
+        "metric.arr",
+        "metric.logo-churn-rate",
+        "register.expense-tracking",
+        "register.vendors",
+        "register.ap-ar"
+      ],
+      "tags": [
+        "finance",
+        "forecast",
+        "fp&a",
+        "board"
+      ],
+      "path": "analytics-reference/models/operating-model.md"
+    },
+    {
       "id": "entity.engagement-event",
       "type": "entity",
       "title": "Engagement events \u2192 product concepts",
@@ -432,6 +511,21 @@
       "path": "analytics-reference/product/engagement-mapping.md"
     },
     {
+      "id": "tooling.airflow",
+      "type": "tooling",
+      "title": "Airflow pipelines (ETL)",
+      "owner": "data",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "system": "Airflow (managed) + GitHub repo lumen/data-pipelines, via GitHub MCP",
+      "tags": [
+        "tooling",
+        "etl",
+        "pipelines"
+      ],
+      "path": "execution/tooling/airflow.md"
+    },
+    {
       "id": "tooling.google-sheets",
       "type": "tooling",
       "title": "Google Sheets output",
@@ -444,6 +538,21 @@
         "output"
       ],
       "path": "execution/tooling/google-sheets.md"
+    },
+    {
+      "id": "tooling.html-dashboards",
+      "type": "tooling",
+      "title": "Shareable HTML dashboards",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "system": "Internal static host (dashboards.lumen.internal, behind SSO)",
+      "tags": [
+        "tooling",
+        "output",
+        "dashboards"
+      ],
+      "path": "execution/tooling/html-dashboards.md"
     },
     {
       "id": "tooling.planning-mcp",
@@ -474,11 +583,33 @@
       "path": "execution/tooling/warehouse-mcp.md"
     },
     {
+      "id": "tooling.workspace-search",
+      "type": "tooling",
+      "title": "Searching Slack, Drive, GitHub, and agent memory",
+      "owner": "bizops",
+      "status": "reviewed",
+      "updated": "2026-11-22",
+      "system": "Slack, Google Drive, and GitHub via MCP; local agent memory files",
+      "tags": [
+        "tooling",
+        "search",
+        "history"
+      ],
+      "path": "execution/tooling/workspace-search.md"
+    },
+    {
       "id": "skill.answer-metric-question",
       "type": "skill",
       "name": "answer-metric-question",
       "description": "Answer a question about a business metric (\"what's our NRR?\", \"how many active customers?\") using only the governed definitions and certified queries in analytics-reference. Use for any quantitative question about Lumen's metrics.",
       "path": "execution/skills/answer-metric-question/SKILL.md"
+    },
+    {
+      "id": "skill.board-prep-pivot",
+      "type": "skill",
+      "name": "board-prep-pivot",
+      "description": "Build the standard quarterly board tables (ARR bridge, retention, cohort curves, P&L and cash vs. plan) from certified sources, reconciled to the last board deck. Use when preparing a board deck or investor update, or when someone asks for \"the board numbers\" for a quarter.",
+      "path": "execution/skills/board-prep-pivot/SKILL.md"
     },
     {
       "id": "skill.compare-forecast-versions",
@@ -488,11 +619,39 @@
       "path": "execution/skills/compare-forecast-versions/SKILL.md"
     },
     {
+      "id": "skill.create-airflow-dag",
+      "type": "skill",
+      "name": "create-airflow-dag",
+      "description": "Write a new Airflow DAG (ETL job) for Lumen's data pipelines from a plain-language description, with tests, and open it as a pull request for data-team review. Use when someone needs a new table loaded, a transformation scheduled, or an existing pipeline changed.",
+      "path": "execution/skills/create-airflow-dag/SKILL.md"
+    },
+    {
+      "id": "skill.find-prior-analyses",
+      "type": "skill",
+      "name": "find-prior-analyses",
+      "description": "Find analyses someone already did on a narrow question by searching the knowledge base, agent memory files, Slack, Google Drive, and GitHub in a fixed order, then return a short ranked list with links. Use before starting new analysis, or when someone says \"I know we looked at this before\" but can't find where.",
+      "path": "execution/skills/find-prior-analyses/SKILL.md"
+    },
+    {
+      "id": "skill.month-end-flux",
+      "type": "skill",
+      "name": "month-end-flux",
+      "description": "Explain month-over-month changes in the P&L by expense category and vendor after the books close, separating timing effects from real changes, and produce the standard flux sheet with commentary. Use at month-end close, or when someone asks why an expense line moved.",
+      "path": "execution/skills/month-end-flux/SKILL.md"
+    },
+    {
       "id": "skill.review-kb-checks",
       "type": "skill",
       "name": "review-kb-checks",
       "description": "Walk the knowledge-base owner through the latest automated-check findings one at a time (explain, discuss, accept, refine, or reject), record every decision in the review ledger, and open one pull request with the accepted fixes. Use when someone says \"review the KB checks\", pastes a finding code like SCH-3eb1e7 from the Slack summary, or asks what the checks found.",
       "path": "execution/skills/review-kb-checks/SKILL.md"
+    },
+    {
+      "id": "skill.shareable-dashboard",
+      "type": "skill",
+      "name": "shareable-dashboard",
+      "description": "Turn a plain-language description (\"a page showing annual-plan uptake since the discount change\") into a single self-contained HTML dashboard with charts, governed definitions, and the house formatting, then publish it to the internal host and return the link. Use when someone wants a page they can send around internally rather than a spreadsheet.",
+      "path": "execution/skills/shareable-dashboard/SKILL.md"
     }
   ],
   "edges": [
@@ -652,6 +811,31 @@
       "kind": "link"
     },
     {
+      "from": "register.expense-tracking",
+      "to": "register.vendors",
+      "kind": "depends_on"
+    },
+    {
+      "from": "register.expense-tracking",
+      "to": "register.ap-ar",
+      "kind": "depends_on"
+    },
+    {
+      "from": "register.expense-tracking",
+      "to": "model.operating-model",
+      "kind": "link"
+    },
+    {
+      "from": "register.expense-tracking",
+      "to": "register.ap-ar",
+      "kind": "link"
+    },
+    {
+      "from": "register.expense-tracking",
+      "to": "register.vendors",
+      "kind": "link"
+    },
+    {
       "from": "register.vendors",
       "to": "model.arr-bridge",
       "kind": "link"
@@ -659,6 +843,51 @@
     {
       "from": "register.vendors",
       "to": "register.ap-ar",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "framework.growth-accounting",
+      "kind": "depends_on"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "analysis.2026-09-churn-by-cohort",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "entity.engagement-event",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "framework.growth-accounting",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "metric.cohort-retention",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "metric.trial-to-paid",
+      "kind": "link"
+    },
+    {
+      "from": "framework.cohort-methods",
+      "to": "model.operating-model",
       "kind": "link"
     },
     {
@@ -674,6 +903,56 @@
     {
       "from": "framework.growth-accounting",
       "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "framework.mix-shift",
+      "kind": "depends_on"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "entity.engagement-event",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "entity.subscription",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "framework.growth-accounting",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "framework.mix-shift",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "query.fct-arr-daily",
+      "kind": "link"
+    },
+    {
+      "from": "framework.lmdi",
+      "to": "register.vendors",
       "kind": "link"
     },
     {
@@ -962,6 +1241,91 @@
       "kind": "link"
     },
     {
+      "from": "model.operating-model",
+      "to": "model.arr-bridge",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "metric.arr",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "metric.logo-churn-rate",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "register.expense-tracking",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "register.vendors",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "register.ap-ar",
+      "kind": "depends_on"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "decision.2026-10-annual-plan-discount",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "framework.cohort-methods",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "framework.lmdi",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "metric.trial-to-paid",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "register.ap-ar",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "register.expense-tracking",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "register.vendors",
+      "kind": "link"
+    },
+    {
+      "from": "model.operating-model",
+      "to": "tooling.planning-mcp",
+      "kind": "link"
+    },
+    {
       "from": "entity.engagement-event",
       "to": "source.product-events",
       "kind": "depends_on"
@@ -992,6 +1356,16 @@
       "kind": "link"
     },
     {
+      "from": "tooling.airflow",
+      "to": "register.key-tables",
+      "kind": "link"
+    },
+    {
+      "from": "tooling.airflow",
+      "to": "tooling.warehouse-mcp",
+      "kind": "link"
+    },
+    {
       "from": "tooling.warehouse-mcp",
       "to": "register.key-tables",
       "kind": "link"
@@ -1008,6 +1382,71 @@
     },
     {
       "from": "skill.answer-metric-question",
+      "to": "tooling.warehouse-mcp",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "framework.cohort-methods",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "framework.lmdi",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "metric.cohort-retention",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "metric.net-revenue-retention",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "model.arr-bridge",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "model.operating-model",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "query.fct-arr-daily",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "register.ap-ar",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "tooling.google-sheets",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
+      "to": "tooling.planning-mcp",
+      "kind": "link"
+    },
+    {
+      "from": "skill.board-prep-pivot",
       "to": "tooling.warehouse-mcp",
       "kind": "link"
     },
@@ -1044,6 +1483,136 @@
     {
       "from": "skill.compare-forecast-versions",
       "to": "tooling.planning-mcp",
+      "kind": "link"
+    },
+    {
+      "from": "skill.create-airflow-dag",
+      "to": "entity.customer",
+      "kind": "link"
+    },
+    {
+      "from": "skill.create-airflow-dag",
+      "to": "entity.subscription",
+      "kind": "link"
+    },
+    {
+      "from": "skill.create-airflow-dag",
+      "to": "register.key-tables",
+      "kind": "link"
+    },
+    {
+      "from": "skill.create-airflow-dag",
+      "to": "source.stripe",
+      "kind": "link"
+    },
+    {
+      "from": "skill.create-airflow-dag",
+      "to": "tooling.airflow",
+      "kind": "link"
+    },
+    {
+      "from": "skill.create-airflow-dag",
+      "to": "tooling.warehouse-mcp",
+      "kind": "link"
+    },
+    {
+      "from": "skill.find-prior-analyses",
+      "to": "analysis.2026-09-churn-by-cohort",
+      "kind": "link"
+    },
+    {
+      "from": "skill.find-prior-analyses",
+      "to": "decision.2026-10-annual-plan-discount",
+      "kind": "link"
+    },
+    {
+      "from": "skill.find-prior-analyses",
+      "to": "metric.dau",
+      "kind": "link"
+    },
+    {
+      "from": "skill.find-prior-analyses",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "skill.find-prior-analyses",
+      "to": "tooling.workspace-search",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "entity.engagement-event",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "framework.lmdi",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "model.operating-model",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "register.ap-ar",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "register.expense-tracking",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "register.vendors",
+      "kind": "link"
+    },
+    {
+      "from": "skill.month-end-flux",
+      "to": "tooling.google-sheets",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "decision.2026-10-annual-plan-discount",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "framework.cohort-methods",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "metric.arr",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "metric.dau",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "metric.logo-churn-rate",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "tooling.google-sheets",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "tooling.html-dashboards",
+      "kind": "link"
+    },
+    {
+      "from": "skill.shareable-dashboard",
+      "to": "tooling.warehouse-mcp",
       "kind": "link"
     }
   ]
