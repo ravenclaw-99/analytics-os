@@ -6,8 +6,8 @@ Every check starts **human-in-the-loop**: it writes a report (and optionally a d
 |---|---|---|---|---|---|
 | 0 | `kb-check` (lint) | every PR + daily | `tools/kb.py check` | nothing | CI status |
 | 1 | `schema-integrity` | **daily**, 06:00 | deterministic | warehouse catalog (MCP / CLI) | `#data-quality`; data owner |
-| 2 | `semantic-integrity` | **weekly**, Mon | deterministic + agent | knowledge base only | canonical artifacts' owners |
-| 3 | `cohesion-redundancy` | **weekly**, Mon | deterministic + agent | knowledge base only | knowledge-base maintainer |
+| 2 | `semantic-integrity` | **weekly**, Tue | deterministic + agent | knowledge base only | canonical artifacts' owners |
+| 3 | `cohesion-redundancy` | **weekly**, Tue | deterministic + agent | knowledge base only | knowledge-base maintainer |
 | 4 | `proactive-enrichment` | **weekly**, Fri | agent | GitHub, Slack, Drive MCPs | owners of affected artifacts |
 | 5 | `analytical-gaps` | **weekly**, Fri | agent | Slack, Drive, query history, agent logs | BizOps / analytics lead |
 
@@ -26,7 +26,7 @@ Every check starts **human-in-the-loop**: it writes a report (and optionally a d
 on:
   schedule:
     - cron: "0 6 * * *"   # daily: schema integrity
-    - cron: "0 7 * * 1"   # Mondays: semantic + cohesion
+    - cron: "0 7 * * 2"   # Tuesdays: semantic + cohesion
     - cron: "0 7 * * 5"   # Fridays: enrichment + gaps
 ```
 Each entry exports the warehouse catalog, then calls `system/jobs/pipeline.sh <check>`, with `AGENT_CMD` pointed at a headless agent that has the right MCP servers and a read-only role. It stays a dry run (summaries printed to the log, not posted) until the repo variable `CANONICAL_SEND` is `true` and the webhook secret is set. The same pipeline runs under any other scheduler: Airflow, Cloud Scheduler, or cron.
